@@ -8,6 +8,8 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
@@ -48,6 +50,19 @@ import org.restlet.ext.xml.format.XmlFormatParser;
 public class AtomFeedHandler<T> extends XmlFormatParser implements
 		FormatParser<Feed> {
 
+	/**
+	 * The Constant REGEX_PATTERN_ENTITY_WITH_ID. <br>
+	 * <br>
+	 * Note that this uses a greedy qualifier to match the whole string and then
+	 * work backwards. This is required for matching because the entity id might
+	 * have ")" in the id itself.<br>
+	 * <br>
+	 * 
+	 * The example of such an id would be
+	 * Product(attribute='X(SAMPLE)',id=19)/$value
+	 **/
+	private static final String REGEX_PATTERN_ENTITY_WITH_ID = "([^\\(.]+[\\(.+\\)\\/])+";
+	
 	/** The metadata. */
 	protected Metadata metadata;
 	
@@ -422,9 +437,7 @@ public class AtomFeedHandler<T> extends XmlFormatParser implements
 		String contentType = null;
 		Person p = null;
 		String relativeURL=null;
-		//read the base URL form Feed/Entry
-		String baseURL=entryElement.getAttributeByName(XML_BASE).getValue();
-
+		
 		Entry rt = new Entry();
 
 		while (reader.hasNext()) {
@@ -516,12 +529,30 @@ public class AtomFeedHandler<T> extends XmlFormatParser implements
 									.getDeclaredFields()) {
 								Class<?> type = field.getType();							
 								if(type.getName().contains("StreamReference")){
-									Reference baseReference = new Reference(baseURL);
-								    StreamReference streamReference = new StreamReference(baseReference,relativeURL);
-								    streamReference.setContentType(contentType);
-								    ReflectUtils.invokeSetter(entity,
-												ReflectUtils.normalize(field.getName()), streamReference);
-								    break;
+									Reference baseReference = new Reference(id);
+									// Note that the base URL can be empty in
+									// case of entry when it is part of the feed
+									// or when the entity is inline
+									if (relativeURL != null) {
+										Pattern entityIdPattern = Pattern
+												.compile(AtomFeedHandler.REGEX_PATTERN_ENTITY_WITH_ID);
+										Matcher entityIdMatcher = entityIdPattern
+												.matcher(relativeURL);
+										if (entityIdMatcher.find()) {
+											relativeURL = relativeURL
+													.substring(entityIdMatcher
+															.end());
+										}
+									}
+									StreamReference streamReference = new StreamReference(
+											this.normalizeBaseURLForStream(baseReference),
+											relativeURL);
+									streamReference.setContentType(contentType);
+									ReflectUtils.invokeSetter(entity,
+											ReflectUtils.normalize(field
+													.getName()),
+											streamReference);
+									break;
 								}
 							}
 						}
@@ -829,4 +860,22 @@ public class AtomFeedHandler<T> extends XmlFormatParser implements
 		}
 	}
 	
+	/**
+	 * Normalize base url for stream by appending "/" at the end if it doesn't
+	 * exist. Note that for the relative path, if it starts with "/"; then the
+	 * base reference is not attached to the final target reference.
+	 * 
+	 * @param baseReference
+	 *            the base reference
+	 * @return the reference
+	 */
+	private Reference normalizeBaseURLForStream(Reference baseReference) {
+		if (!baseReference.getPath().endsWith("/")) {
+			// The toString() method returns the internal reference that points
+			// to the URL
+			return new Reference(baseReference.toString() + "/");
+		} else {
+			return baseReference;
+		}
+	}
 }
