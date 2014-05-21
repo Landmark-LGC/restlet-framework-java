@@ -33,6 +33,7 @@
 
 package org.restlet.resource;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -57,6 +58,7 @@ import org.restlet.data.Range;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.EmptyRepresentation;
+import org.restlet.representation.InputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;

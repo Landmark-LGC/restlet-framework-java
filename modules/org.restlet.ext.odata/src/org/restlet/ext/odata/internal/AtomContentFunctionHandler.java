@@ -27,6 +27,7 @@ public class AtomContentFunctionHandler extends XmlFormatParser implements Funct
 	 * java.lang.String, java.util.List)
 	 */
 	@SuppressWarnings({ "unused", "unchecked", "rawtypes" })
+	@Override
 	public Object parseResult(Class<?> classType,
 			Representation representation, String functionName, List<?> entity) {
 		try {

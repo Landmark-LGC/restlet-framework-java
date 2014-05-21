@@ -578,11 +578,7 @@ public class MetadataReader extends DefaultHandler {
             if (nullable == null) {
                 property.setNullable(true);
             } else {
-            	boolean isNullable = Boolean.parseBoolean(nullable);
-                property.setNullable(isNullable);
-                if(!isNullable){
-                	property.getAnnotations().add("NotNull");
-                }
+                property.setNullable(Boolean.parseBoolean(nullable));
             }
 
             // ConcurrencyMode
@@ -599,32 +595,8 @@ public class MetadataReader extends DefaultHandler {
             if (str != null) {
                 property.setMediaType(MediaType.valueOf(str));
             }
-            
-            String systemGenerated = attrs.getValue(
-            		XmlFormatParser.NS_DSDS_EDMANNOTATION, "IsSystemGenerated");
-            if (systemGenerated != null) {
-            	boolean isSystemGenerated = Boolean.parseBoolean(systemGenerated);
-            	if(isSystemGenerated){
-            		property.getAnnotations().add("SystemGenerated");
-                }
-            }
-            
-            String propName = attrs.getValue("Name");
-            //add annotation to the property if it property name is same as java reserved key word.
-            if(propName!=null&&ReflectUtils.isReservedWord(propName.toLowerCase())){
-            	property.getAnnotations().add("JavaReservedKeyWord");
-            }
-            
-            if(currentEntityType!=null){
-	            List<Property> keys = currentEntityType.getKeys();
-	            for(Property prop : keys){
-	            	if(prop.getName().equalsIgnoreCase(attrs.getValue("Name"))){
-	            		property.getAnnotations().add("PrimaryKey");
-	            	}
-	            }
-            }
-            
-           if (getState() == State.ENTITY_TYPE) {
+
+            if (getState() == State.ENTITY_TYPE) {
                 pushState(State.ENTITY_TYPE_PROPERTY);
                 if (property instanceof ComplexProperty) {
                     this.currentEntityType.getComplexProperties().add(

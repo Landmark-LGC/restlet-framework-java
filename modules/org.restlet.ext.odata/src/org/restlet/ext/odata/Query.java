@@ -33,6 +33,8 @@
 
 package org.restlet.ext.odata;
 
+import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -51,6 +53,7 @@ import org.restlet.ext.odata.internal.EntryContentHandler;
 import org.restlet.ext.odata.internal.FeedContentHandler;
 import org.restlet.ext.odata.internal.edm.EntityType;
 import org.restlet.ext.odata.internal.edm.Metadata;
+import org.restlet.ext.odata.internal.reflect.ReflectUtils;
 import org.restlet.ext.odata.xml.AtomFeedHandler;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
