@@ -42,6 +42,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -75,6 +76,7 @@ import org.restlet.ext.odata.internal.edm.Property;
 import org.restlet.ext.odata.internal.edm.TypeUtils;
 import org.restlet.ext.odata.internal.reflect.ReflectUtils;
 import org.restlet.ext.odata.streaming.StreamReference;
+import org.restlet.ext.odata.validation.annotation.SystemGenerated;
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.ext.xml.SaxRepresentation;
 import org.restlet.ext.xml.XmlWriter;
@@ -87,9 +89,6 @@ import org.restlet.util.Series;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 /**
  * Acts as a manager for a specific remote OData service. OData services are
@@ -137,7 +136,11 @@ public class Service {
     private Logger logger;
     
     private String slug = "";
-
+   
+    /** 
+     * add Query parameter in request header for each call.
+     */
+    private Map<String, String> parameters;
     /**
      * The maximum version of the OData protocol extensions the client can
      * accept in a response.
@@ -365,21 +368,34 @@ public class Service {
         }
 
         resource.setChallengeResponse(getCredentials());
-
+        Series<Header> headers = new Series<Header>(Header.class);
         if (getClientVersion() != null || getMaxClientVersion() != null) {
-            Series<Header> headers = new Series<Header>(Header.class);
-
+        	
             if (getClientVersion() != null) {
                 headers.add("DataServiceVersion", getClientVersion());
             }
 
             if (getMaxClientVersion() != null) {
                 headers.add("MaxDataServiceVersion", getMaxClientVersion());
-            }
-
-            resource.setAttribute(HeaderConstants.ATTRIBUTE_HEADERS, headers);
+            }            
+          
         }
+       
+		/*
+		 * Check if query parameter map is not null and not empty, add all the
+		 * Query parameters in request as a header.
+		 */
+		if (getParameter() != null && !getParameter().isEmpty()) {
+			Iterator<java.util.Map.Entry<String, String>> iterator = getParameter()
+					.entrySet().iterator();
+			while (iterator.hasNext()) {
+				java.util.Map.Entry<String, String> entry = iterator.next();
+				headers.add(entry.getKey(), entry.getValue());
+			}
 
+		}    
+        resource.setAttribute(HeaderConstants.ATTRIBUTE_HEADERS, headers);
+       
         return resource;
     }
 
@@ -935,11 +951,8 @@ public class Service {
 	                                        parameter.getType()));
 	                    }
                 	}else{
-                	// if http_method is other than GET/DELETE, then send the function parameters as part of body in json format
-                		Gson gson = new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().create();
-                		StringBuilder sb = new StringBuilder();
+                	    StringBuilder sb = new StringBuilder();
                 		sb.append("{"+"\n");
-                		String val="";
                 		String json ="";
                 		int noOfParameters=0;
                 		for (Parameter parameter : parameters) {
@@ -1238,6 +1251,8 @@ public class Service {
                             AttributesImpl nullAttrs) throws SAXException {
                         for (Field field : entity.getClass()
                                 .getDeclaredFields()) {
+                        	SystemGenerated systemGeneratedAnnotation = field
+                        			.getAnnotation(SystemGenerated.class);
                             String getter = "get"
                                     + field.getName().substring(0, 1)
                                             .toUpperCase()
@@ -1245,7 +1260,7 @@ public class Service {
                             Property prop = ((Metadata) getMetadata())
                                     .getProperty(entity, field.getName());
 
-                            if (prop != null) {
+							if (prop != null && systemGeneratedAnnotation == null) {
                                 writeProperty(writer, entity, prop, getter,
                                         nullAttrs);
                             }
@@ -1534,5 +1549,23 @@ public class Service {
             this.latestResponse = resource.getResponse();
         }
     }
+
+	/**
+	 * Gets Query parameter.
+	 *
+	 * @return the parameter
+	 */
+	public Map<String, String> getParameter() {
+		return parameters;
+	}
+
+	/**
+	 * Sets Query parameter in request header.
+	 *
+	 * @param parameter the parameter
+	 */
+	public void setParameters(Map<String, String> parameters) {
+		this.parameters = parameters;
+	}
 
 }
