@@ -75,7 +75,8 @@ public class Generator {
      * <li>Password to access OData service</li>
      * <li>ChallangeScheme - Possible values HTTP_BASIC, HTTP_NEGOTIATE, if not provided then HTTP_BASIC will be used as default.</li>
      * <li>Service class name</li>
-     * <li>The output directory for Service class generation (For example : src/com/edm/entities)</li>
+     * <li>The output directory for Service class generation (For example : src/com/edm/entities), 
+     *       if no directory is provided class will be generated in the default package.</li>
      * <li>The output directory for Entity class generation (For example : src/com/edm/service), 
      *       if no directory is provided schema name will be used as default package.</li>
      * </ol>
@@ -110,17 +111,13 @@ public class Generator {
             	password = args[2];
             }
             
-            if (args.length > 3) {
-				if ("null".equalsIgnoreCase(args[3])) {
+			if (args.length > 3) {
+				if ("null".equalsIgnoreCase(args[3]) || "".equalsIgnoreCase(args[3])) {
 					challangeScheme = ChallengeScheme.HTTP_BASIC;
-				} else if ("".equalsIgnoreCase(args[3])) {
-					challangeScheme = ChallengeScheme.HTTP_BASIC;
-				} else if ("HTTP_BASIC".equalsIgnoreCase(args[3])) {
-					challangeScheme = ChallengeScheme.HTTP_BASIC;
-				} else if ("HTTP_NEGOTIATE".equalsIgnoreCase(args[3])) {
-					challangeScheme = ChallengeScheme.HTTP_NEGOTIATE;
+				} else {
+					challangeScheme = ChallengeScheme.valueOf(args[3]);
 				}
-            }
+			}
             
             if (args.length > 4) {
             	serviceClassName = args[4];
