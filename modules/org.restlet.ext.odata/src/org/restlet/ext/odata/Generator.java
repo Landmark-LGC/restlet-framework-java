@@ -335,8 +335,8 @@ public class Generator {
 					|| (schema.getComplexTypes() != null && !schema
 							.getComplexTypes().isEmpty())) {
 				
-				File packageDir = new File(outputDir, TypeUtils
-						.getPackageName(schema));
+				File packageDir = outputDir != null ? outputDir : new File(
+						TypeUtils.getPackageName(schema));
 				packageDir.mkdirs();
 				
 				String packageName = outputDir != null ? (entityPkg.replace(
