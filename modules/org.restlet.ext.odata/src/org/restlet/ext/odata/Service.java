@@ -267,7 +267,10 @@ public class Service {
 						r.write(baos);
 					}
 					baos.flush();
-					StringRepresentation r = new StringRepresentation(baos.toString(), FormatType.getMediaType(this.getFormatType()));
+					MediaType mediaType = FormatType.getMediaType(this.getFormatType());
+					StringRepresentation r = new StringRepresentation(baos.toString(), mediaType);
+					// set Accept: header corresponding to media type for. json/atom/jsonverbose
+					resource.getRequest().getClientInfo().accept(mediaType);
 					rep = resource.post(r);
 					// parse the response to populate the newly created entity object
 					
