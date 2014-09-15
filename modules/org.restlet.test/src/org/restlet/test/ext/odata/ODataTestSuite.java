@@ -34,6 +34,8 @@
 package org.restlet.test.ext.odata;
 
 import org.restlet.test.ext.odata.complexcrud.ODataCafeCrudTestCase;
+import org.restlet.test.ext.odata.complexcrud.json.ODataCafeCrudJsonTestCase;
+import org.restlet.test.ext.odata.crud.json.ODataSimpleCafeCrudTestCaseJson;
 import org.restlet.test.ext.odata.deepexpand.ODataDeepExpandTestCase;
 import org.restlet.test.ext.odata.function.ActionTestCase;
 import org.restlet.test.ext.odata.function.FunctionTestCase;
@@ -62,8 +64,11 @@ public class ODataTestSuite extends TestSuite {
         result.addTestSuite(ODataDeepExpandTestCase.class);
         result.addTestSuite(ODataCafeCrudTestCase.class);
         result.addTestSuite(org.restlet.test.ext.odata.crud.ODataCafeCrudTestCase.class);
+        result.addTestSuite(ODataCafeCrudJsonTestCase.class);
         result.addTestSuite(ODataCafeCrudStreamTestCase.class);
+        result.addTestSuite(ODataSimpleCafeCrudTestCaseJson.class);
         result.addTestSuite(ActionTestCase.class);
+        result.addTestSuite(FunctionTestCase.class);
         result.addTestSuite(FunctionTestCase.class);
 
         return result;
