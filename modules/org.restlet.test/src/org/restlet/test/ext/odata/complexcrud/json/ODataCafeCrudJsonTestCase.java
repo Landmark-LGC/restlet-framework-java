@@ -63,7 +63,6 @@ public class ODataCafeCrudJsonTestCase extends RestletTestCase {
 					"Cannot add entity due to: " + e.getMessage());
 			Assert.fail();
 		}
-		Assert.fail();//FIXME: Remove this after checking build
 		Query<Cafe> query = service.createCafeQuery("/Cafes");
 		Cafe cafe1 = query.iterator().next();
 		assertEquals("TestName", cafe1.getName());
