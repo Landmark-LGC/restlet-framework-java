@@ -971,6 +971,8 @@ public class Service {
 
             if (function != null) {
                 ClientResource resource = createResource(service);
+                // Set format type
+                resource.getRequest().getClientInfo().accept(FormatType.getMediaType(this.getFormatType()));
                 if(function.getMethod() !=null){
                 	resource.setMethod(function.getMethod());
                 }
