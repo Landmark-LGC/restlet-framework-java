@@ -1,7 +1,4 @@
 package org.restlet.ext.odata.internal;
-import java.util.List;
-
-import org.restlet.representation.Representation;
 
 
 /**
@@ -15,6 +12,7 @@ public interface FunctionContentHandler {
 	
 	/**
 	 * Parses the result.
+	 * @param <T>
 	 *
 	 * @param classType - Class<?>
 	 * @param representation - Representation
@@ -22,5 +20,5 @@ public interface FunctionContentHandler {
 	 * @param returnType - The return type
 	 * @return expected result object for a function or action
 	 */
-	Object parseResult(Class<?> classType, Representation representation, String functionName, List<?> returnType);
+	Object parseResult();
 }

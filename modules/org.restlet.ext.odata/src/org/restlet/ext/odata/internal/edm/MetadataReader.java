@@ -697,29 +697,28 @@ public class MetadataReader extends DefaultHandler {
             this.pushState(State.REFERENTIAL_CONSTRAINT);
         } else if ("functionImport".equalsIgnoreCase(localName)) {
             currentFunctionImport = new FunctionImport(attrs.getValue("Name"));
-            currentFunctionImport.setReturnType(attrs.getValue("ReturnType"));
+            String returnType = attrs.getValue("ReturnType");
             currentFunctionImport.setEntitySet(new EntitySet(attrs
                     .getValue("EntitySet")));
             currentFunctionImport.setMethodAccess(attrs
                     .getValue("MethodAccess"));
             currentFunctionImport.setMetadata(currentMetadata);
-            String elementType = attrs.getValue(XmlFormatParser.NS_DSDS_EDMANNOTATION, "elementType");
-			if (elementType != null) {
-				String[] split = elementType.split("\\.");
-				String className = ReflectUtils.normalize(split[1]);
-				className = className.substring(0, 1).toUpperCase() + className.substring(1);
-				currentFunctionImport.setJavaReturnType(className);
-				currentFunctionImport.setComplex(true);
-			} else if (attrs.getValue("ReturnType") != null) {
-				if (TypeUtils.isCollection(attrs.getValue("ReturnType"))) {
-					String type = TypeUtils.getClassType(attrs.getValue("ReturnType"));
+            if (returnType != null) {
+				currentFunctionImport.setReturnType(returnType);
+				if (TypeUtils.isCollection(returnType)) {
+					String type = TypeUtils.getClassType(returnType);
 					currentFunctionImport.setJavaReturnType("List<"+type+">");
-					currentFunctionImport.setReturnType(type);
+					currentFunctionImport.setElementType(type);
 					currentFunctionImport.setCollection(true);
 				}else {
-					currentFunctionImport.setSimple(true);
-					currentFunctionImport.setJavaReturnType(TypeUtils
-							.toJavaTypeName(attrs.getValue("ReturnType")));
+					if(TypeUtils.isEdmSimpleType(returnType)){
+						currentFunctionImport.setSimple(true);
+					}else{
+						currentFunctionImport.setComplex(true);
+					}
+					String type = TypeUtils.toJavaTypeName(returnType);
+					currentFunctionImport.setJavaReturnType(type);
+					currentFunctionImport.setElementType(type);
 				}
 			}else {				
 				currentFunctionImport.setComplex(true);

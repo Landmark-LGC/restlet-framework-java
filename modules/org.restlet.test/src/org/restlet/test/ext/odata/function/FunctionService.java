@@ -5,10 +5,7 @@ import java.util.List;
 
 import org.restlet.data.Parameter;
 import org.restlet.ext.odata.Service;
-import org.restlet.ext.odata.internal.AtomContentFunctionHandler;
 import org.restlet.ext.odata.internal.FunctionContentHandler;
-import org.restlet.ext.odata.internal.JsonContentFunctionHandler;
-import org.restlet.representation.Representation;
 import org.restlet.util.Series;
 
 import com.google.gson.Gson;
@@ -20,19 +17,15 @@ import com.google.gson.GsonBuilder;
  */
 public class FunctionService extends Service {
 
-	FunctionContentHandler functionContentHandler;
-
 	/**
 	 * Constructor. 
 	 */
 	public FunctionService() {
 		super("http://localhost:8111/Unit.svc");
-		this.functionContentHandler = new JsonContentFunctionHandler();
 	}
 
 	public FunctionService(FunctionContentHandler functionContentHandler) {
 		super("http://localhost:8111/Unit.svc");
-		this.functionContentHandler = functionContentHandler;
 	}
 
 	public Nextval_t nextval(String tableName) {
@@ -42,10 +35,7 @@ public class FunctionService extends Service {
 		paramtableName.setName("tableName");
 		paramtableName.setValue(tableName.toString());
 		parameters.add(paramtableName);
-		Representation representation = invokeComplex("nextval", parameters);
-
-		nextval = (Nextval_t) functionContentHandler.parseResult(
-				Nextval_t.class, representation, "nextval", null);
+		nextval = (Nextval_t) invokeFunction("nextval", parameters, Nextval_t.class, nextval);
 		return nextval;
 	}
 
@@ -73,13 +63,7 @@ public class FunctionService extends Service {
 		paramnullValue.setName("nullValue");
 		paramnullValue.setValue(nullValue.toString());
 		parameters.add(paramnullValue);
-		Representation representation = invokeComplex("convertDoubleArray",
-				parameters);
-		AtomContentFunctionHandler atomContentFunctionHandler = new AtomContentFunctionHandler();
-
-		convertDoubleArray = (List<java.lang.Double>) atomContentFunctionHandler
-				.parseResult(convertDoubleArray.getClass(), representation,
-						"convertDoubleArray", convertDoubleArray);
+		convertDoubleArray = (List<java.lang.Double>) invokeFunction("convertDoubleArray", parameters, java.lang.Double.class, convertDoubleArray);
 		return convertDoubleArray;
 	}
 }

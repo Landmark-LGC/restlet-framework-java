@@ -3,93 +3,179 @@ package org.restlet.ext.odata.internal;
 import java.io.IOException;
 import java.util.List;
 
-import javax.xml.namespace.QName;
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.XMLEvent;
-
 import org.restlet.Context;
-import org.restlet.ext.odata.xml.AtomFeedHandler;
-import org.restlet.ext.xml.format.XmlFormatParser;
+import org.restlet.ext.atom.Feed;
+import org.restlet.ext.odata.internal.edm.FunctionImport;
+import org.restlet.ext.odata.internal.edm.Metadata;
+import org.restlet.ext.odata.internal.edm.TypeUtils;
+import org.restlet.ext.odata.json.JsonFormatParser;
+import org.restlet.ext.odata.json.JsonStreamReaderFactory;
+import org.restlet.ext.odata.json.JsonStreamReaderFactory.JsonStreamReader;
+import org.restlet.ext.odata.json.JsonStreamReaderFactory.JsonStreamReader.JsonEvent;
 import org.restlet.representation.Representation;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
-
 /**
- * This class is added for parsing the representation result provided by RESLET as a response in the 
- * expected object/return type for the functions/actions.
+ * This class is added for parsing the representation result provided by RESLET
+ * as a response in the expected object/return type for the functions/actions.
  * 
  * @author Shantanu
+ * @param <T>
  */
-public class JsonContentFunctionHandler extends XmlFormatParser implements FunctionContentHandler {
-
+public class JsonContentFunctionHandler<T> extends JsonFormatParser<T>
+		implements FunctionContentHandler {
 	
-	/* (non-Javadoc)
-	 * @see org.restlet.ext.odata.internal.FunctionContentHandler#parseResult(java.lang.Class, org.restlet.representation.Representation, 
-	 * java.lang.String, java.util.List)
-	 */
-	public Object parseResult(Class<?> c, Representation representation, String functionName,List<?> entity) {
+	private Representation representation;
+	private FunctionImport function;
+	private T entity;
+	
+	public JsonContentFunctionHandler(Class<?> entityClass, Representation representation,
+			FunctionImport function, Metadata metadata, T entity) {
+		this.entityClass = entityClass;
+		this.metadata = metadata;
+		this.function = function;
+		this.representation = representation;
+		this.entity = entity;
+	}
+
+	@Override
+	public Object parseResult() {
+		Object value = null;
 		try {
-			String jsonString = null;
-			XMLInputFactory factory = XMLInputFactory.newInstance();
-			XMLEventReader eventReader;
-			eventReader = factory.createXMLEventReader(representation.getReader());
+			JsonStreamReader jsr = JsonStreamReaderFactory
+					.createJsonStreamReader(this.representation.getReader());
+			boolean hasResultsProp = false;
+			try {
+				// {
+				JsonEvent event = null;
+				this.ensureStartObject(jsr.nextEvent());
 
-			while (eventReader.hasNext()) {
-				XMLEvent event;
-				event = eventReader.nextEvent();
-				if(isStartElement(event, new QName(XmlFormatParser.NS_DATASERVICES, functionName))){
-					jsonString = AtomFeedHandler.innerText(eventReader, event.asStartElement());
+				// "d" :
+				this.ensureStartProperty(jsr.nextEvent(), DATA_PROPERTY);
+
+				// {
+				this.ensureStartObject(jsr.nextEvent());
+				// results only for collections, if it is single entity or
+				// property it won't be there
+				// "results" :
+				event = jsr.nextEvent();
+				// if it is start property, check if its results/__metada and
+				// then skip them
+				if (event.isStartProperty()) {
+					if (event.asStartProperty().getName()
+							.equals((RESULTS_PROPERTY))) {
+						hasResultsProp = true;
+						// skip [
+						event = jsr.nextEvent();
+					}
 				}
-			}
-
-			if (jsonString != null && !jsonString.equals("")) {
-				StringBuilder jsonStrBuilder = new StringBuilder();
-				jsonStrBuilder.append("{");
-				int beginIndex = jsonString.indexOf("{");
-				int endIndex = jsonString.indexOf("}");
-				String jsonStringWithoutBraces = jsonString.substring(beginIndex + 1,	endIndex);
-
-				if (jsonStringWithoutBraces != null) {
-					String[] propertiesSplit = jsonStringWithoutBraces.trim().split(",");
-
-					for (int i = 0; i < propertiesSplit.length; i++) {
-						String value = propertiesSplit[i];
-
-						if (value.contains(":")) {
-							String[] split = value.trim().split(":");
-							String valueToNormalise = split[0].trim();
-							String normalisedValue = valueToNormalise.substring(0, 1)
-									+ valueToNormalise.substring(1, 2).toLowerCase()
-									+ valueToNormalise.substring(2);
-							jsonStrBuilder.append(normalisedValue);
-							jsonStrBuilder.append(":");
-							jsonStrBuilder.append(split[1]);
+	            String edmReturnType = this.function.getReturnType();
+				// create instance of entity, parse it and add it to list of
+				// entities
+				if (event.isStartArray()) { // collection later
+					this.parseCollection(jsr);
+					value = this.entity;
+					// ] already processed by parseFeed
+				} else { // simple
+					if(TypeUtils.isEdmSimpleType(edmReturnType)){ // Return type startswith EDM : Simple
+						event = jsr.nextEvent();
+						if(event.isEndProperty()){
+							value = TypeUtils.fromEdm(event.asEndProperty()
+									.getValue(), edmReturnType);
 						}
-
-						if (!(i == (propertiesSplit.length - 1))) {
-							jsonStrBuilder.append(",");
-						}
+						this.ensureEndObject(jsr.nextEvent());
+					} else { // complex
+						do {
+							this.addProperty(this.entity, event
+									.asStartProperty().getName(), jsr);
+							event = jsr.nextEvent();
+						} while (!event.isEndObject());
+						value = this.entity;
 					}
 				}
 
-				jsonStrBuilder.append("}");
-				return new Gson().fromJson(jsonStrBuilder.toString(), c);
+				if (hasResultsProp) {
+					// EndProperty of "results" :
+					this.ensureEndProperty(jsr.nextEvent());
+				}
+
+				event = jsr.nextEvent();
+
+				if (hasResultsProp) {
+					// EndObject and EndProperty of "result" :
+					this.ensureEndObject(event);
+					this.ensureEndProperty(jsr.nextEvent());
+				}
+
+				this.ensureEndObject(jsr.nextEvent());
+
+				if (jsr.hasNext())
+					throw new IllegalArgumentException("garbage after the feed");
+
+			} catch (Exception e) {
+				Context.getCurrentLogger().warning(
+						"Cannot parse the json content due to Json Syntax Exception: "
+								+ e.getMessage());
+			} finally {
+				jsr.close();
 			}
-		} catch (XMLStreamException e) {
-			Context.getCurrentLogger().warning(
-                    "Cannot parse the xml due to Stream Exception: " + e.getMessage());
 		} catch (IOException e) {
 			Context.getCurrentLogger().warning(
-                    "Cannot parse the xml due to IO Exception: " + e.getMessage());
+					"Cannot parse the json content due to IO Exception: "
+							+ e.getMessage());
 		} catch (JsonSyntaxException e) {
 			Context.getCurrentLogger().warning(
-                    "Cannot parse the xml due to Json Syntax Exception: " + e.getMessage());
+					"Cannot parse the json content due to Json Syntax Exception: "
+							+ e.getMessage());
 		}
-		return null;
+		return value;
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	protected void parseCollection(JsonStreamReader jsr) {
+		try {
+			boolean isPrimitiveCollection = TypeUtils.isEdmSimpleType(TypeUtils.getCollectionType(this.function.getReturnType()));
+			if (isPrimitiveCollection) { // simple type
+				String edmType = TypeUtils.toEdmType(this.entityClass.getName());
+				// just add value to list
+				while (jsr.hasNext()) {
+					JsonEvent event2 = jsr.nextEvent();
+					if (event2.isEndArray()) {
+						break;
+					} 
+					Object value = TypeUtils
+							.fromEdm(event2.asValue().getValue(),edmType);
+					((List) this.entity).add(value);
+				}
+			} else { // complex type
+				while (jsr.hasNext()) {
+					JsonEvent event2 = jsr.nextEvent();
+					if (event2.isStartObject()) {
+						Object obj = this.entityClass.newInstance();
+						// populate the object
+						this.parseEntry(jsr, (T) obj);
+						((List) this.entity).add(obj);
+					} else if (event2.isEndArray()) {
+						break;
+					}
+				}
+			}
+		} catch (InstantiationException e) {
+			Context.getCurrentLogger().warning(
+					"Cannot parse the feed due to: " + e.getMessage());
+		} catch (IllegalAccessException e) {
+			Context.getCurrentLogger().warning(
+					"Cannot parse the feed due to: " + e.getMessage());
+		}
+	}
+
+	@Override
+	public Feed getFeed() {
+		if (this.feed == null) {
+			this.feed = new Feed();
+		}
+		return this.feed;
 	}
 
 }

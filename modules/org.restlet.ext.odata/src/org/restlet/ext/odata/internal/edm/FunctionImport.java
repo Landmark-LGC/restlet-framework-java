@@ -72,6 +72,9 @@ public class FunctionImport extends NamedObject {
     /** The java return type of this function. */
     private String javaReturnType;
     
+    /** The edm return type. */
+    private String elementType;
+    
     /** The is complex. */
     private boolean complex;
     
@@ -365,6 +368,22 @@ public class FunctionImport extends NamedObject {
 	public void setSimple(boolean isSimple) {
 		this.simple = isSimple;
 	}
-    
-    
+	
+	/**
+	 * Gets the element type.
+	 *
+	 * @return the element type
+	 */
+	public String getElementType() {
+		return elementType;
+	}
+
+	/**
+	 * Sets the element type.
+	 *
+	 * @param elementType the new element type
+	 */
+	public void setElementType(String elementType) {
+		this.elementType = elementType;
+	}
 }

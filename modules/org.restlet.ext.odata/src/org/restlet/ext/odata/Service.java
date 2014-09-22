@@ -52,6 +52,7 @@ import org.restlet.data.ChallengeResponse;
 import org.restlet.data.CharacterSet;
 import org.restlet.data.Cookie;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Parameter;
 import org.restlet.data.Preference;
 import org.restlet.data.Protocol;
@@ -66,6 +67,7 @@ import org.restlet.ext.atom.Entry;
 import org.restlet.ext.atom.Feed;
 import org.restlet.ext.odata.batch.util.RestletBatchRequestHelper;
 import org.restlet.ext.odata.factory.FeedHandlerFactory;
+import org.restlet.ext.odata.internal.FunctionContentHandler;
 import org.restlet.ext.odata.internal.edm.AssociationEnd;
 import org.restlet.ext.odata.internal.edm.EntityContainer;
 import org.restlet.ext.odata.internal.edm.EntityType;
@@ -954,82 +956,86 @@ public class Service {
             Series<Parameter> parameters) throws ResourceException {
         Representation result = null;
         Metadata metadata = (Metadata) getMetadata();
-        if (metadata != null && service != null) {
-            // Look for the FunctionImport element.
-            FunctionImport function = null;
-            for (EntityContainer container : metadata.getContainers()) {
-                for (FunctionImport f : container.getFunctionImports()) {
-                    if (service.equals(f.getName())) {
-                        function = f;
-                        break;
-                    }
-                }
-                if (function != null) {
-                    break;
-                }
+        // Look for the FunctionImport element.
+        FunctionImport function = getFunction(service, metadata);
+        
+        if (function != null) {
+            ClientResource resource = createResource(service);
+            // Set format type
+            resource.getRequest().getClientInfo().accept(FormatType.getMediaType(this.getFormatType()));
+            if(function.getMethod() !=null){
+            	resource.setMethod(function.getMethod());
             }
-
-            if (function != null) {
-                ClientResource resource = createResource(service);
-                // Set format type
-                resource.getRequest().getClientInfo().accept(FormatType.getMediaType(this.getFormatType()));
-                if(function.getMethod() !=null){
-                	resource.setMethod(function.getMethod());
-                }
-                if (parameters != null) {
-                	// if this is GET/DELETE method then send the paramenters in query string
-                	if(resource.getMethod().equals(new org.restlet.data.Method("GET")) || resource.getMethod().equals(new org.restlet.data.Method("DELETE"))){
-	                    for (org.restlet.ext.odata.internal.edm.Parameter parameter : function
-	                            .getParameters()) {                    	
-	                        resource.getReference().addQueryParameter(
-	                                parameter.getName(),
-	                                TypeUtils.getLiteralForm(parameters
-	                                        .getFirstValue(parameter.getName()),
-	                                        parameter.getType()));
-	                    }
-                	}else{
-                	    StringBuilder sb = new StringBuilder();
-                		sb.append("{"+"\n");
-                		String json ="";
-                		int noOfParameters=0;
-                		for (Parameter parameter : parameters) {
-                			noOfParameters++;
-							sb.append("\"").append(parameter.getName()).append("\"").append(":");
-							for (org.restlet.ext.odata.internal.edm.Parameter edmParameter : function.getParameters()) {
-								if(parameter.getName().equalsIgnoreCase(edmParameter.getName())){
-									if(edmParameter.getType().contains("String")){
-										json = "\"" + parameter.getValue()+ "\"";
-									}else if(edmParameter.getType().contains("Collection")){
-										json = parameter.getValue();
-									}else{
-										json = parameter.getValue();
-									}
-									sb.append(json);
-									if(noOfParameters!=parameters.size()){
-										sb.append(",");
-									}
+            if (parameters != null) {
+            	// if this is GET/DELETE method then send the paramenters in query string
+            	if(resource.getMethod().equals(new Method("GET")) || resource.getMethod().equals(new Method("DELETE"))){
+                    for (org.restlet.ext.odata.internal.edm.Parameter parameter : function
+                            .getParameters()) {                    	
+                        resource.getReference().addQueryParameter(
+                                parameter.getName(),
+                                TypeUtils.getLiteralForm(parameters
+                                        .getFirstValue(parameter.getName()),
+                                        parameter.getType()));
+                    }
+            	}else{
+            	    StringBuilder sb = new StringBuilder();
+            		sb.append("{"+"\n");
+            		String json ="";
+            		int noOfParameters=0;
+            		for (Parameter parameter : parameters) {
+            			noOfParameters++;
+						sb.append("\"").append(parameter.getName()).append("\"").append(":");
+						for (org.restlet.ext.odata.internal.edm.Parameter edmParameter : function.getParameters()) {
+							if(parameter.getName().equalsIgnoreCase(edmParameter.getName())){
+								if(edmParameter.getType().contains("String")){
+									json = "\"" + parameter.getValue()+ "\"";
+								}else if(edmParameter.getType().contains("Collection")){
+									json = parameter.getValue();
+								}else{
+									json = parameter.getValue();
+								}
+								sb.append(json);
+								if(noOfParameters!=parameters.size()){
+									sb.append(",");
 								}
 							}
 						}
-                		sb.append("\n"+"}");
-                		Series<Header> headerSeries = new Series<Header>(Header.class);
-                    	resource.getRequest().setEntity(sb.toString(), MediaType.APPLICATION_JSON);
-                    	HeaderUtils.addHeader(HeaderConstants.HEADER_ACCEPT,MediaType.APPLICATION_ATOM.getName(),headerSeries);
-                	    resource.setAttribute(HeaderConstants.ATTRIBUTE_HEADERS, headerSeries);
-                	}
-                }
-                result = resource.handle();
-                this.latestRequest = resource.getRequest();
-                this.latestResponse = resource.getResponse();
+					}
+            		sb.append("\n"+"}");
+            		Series<Header> headerSeries = new Series<Header>(Header.class);
+                	resource.getRequest().setEntity(sb.toString(), MediaType.APPLICATION_JSON);
+                	HeaderUtils.addHeader(HeaderConstants.HEADER_ACCEPT,MediaType.APPLICATION_ATOM.getName(),headerSeries);
+            	    resource.setAttribute(HeaderConstants.ATTRIBUTE_HEADERS, headerSeries);
+            	}
+            }
+            result = resource.handle();
+            this.latestRequest = resource.getRequest();
+            this.latestResponse = resource.getResponse();
 
-                if (resource.getStatus().isError()) {
-                    throw new ResourceException(resource.getStatus());
-                }
+            if (resource.getStatus().isError()) {
+                throw new ResourceException(resource.getStatus());
             }
         }
-
         return result;
     }
+
+	private FunctionImport getFunction(String service, Metadata metadata) {
+		FunctionImport function = null;
+		if (metadata != null && service != null) {
+			for (EntityContainer container : metadata.getContainers()) {
+			    for (FunctionImport f : container.getFunctionImports()) {
+			        if (service.equals(f.getName())) {
+			            function = f;
+			            break;
+			        }
+			    }
+			    if (function != null) {
+			        break;
+			    }
+			}
+		}
+		return function;
+	}
 
     /**
      * Invokes a service operation and return the String value sent back by the
@@ -1051,6 +1057,17 @@ public class Service {
     public String invokeSimple(String service, Series<Parameter> parameters)
             throws ResourceException, Exception {
         return getSimpleValue(invokeComplex(service, parameters), service);
+    }
+    
+    public Object invokeFunction(String service, Series<Parameter> parameters, Class<?> classType, Object entity){
+    	Representation representation = invokeComplex(service, parameters);
+        Metadata metadata = (Metadata) getMetadata();
+    	FunctionImport function = this.getFunction(service, metadata);
+    	if(function.getJavaReturnType()!="void"){
+	    	FunctionContentHandler functionParser = FeedHandlerFactory.getFunctionParser(getFormatType(), classType, representation, function, (Metadata) getMetadata(), entity);
+			return functionParser.parseResult();
+    	}
+    	return null;
     }
 
     /**
