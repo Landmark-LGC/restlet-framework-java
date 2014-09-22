@@ -542,6 +542,7 @@ public class ReflectUtils {
 	public static <T> Object getPropertyObject(T entity, String propertyName) {
 		Object o = null;
 		try {
+			propertyName = ReflectUtils.normalize(propertyName);
 			o = ReflectUtils.invokeGetter(entity, propertyName);
 			Field[] fields = entity.getClass().getDeclaredFields();
 			if (o == null) {

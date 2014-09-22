@@ -716,7 +716,7 @@ public class TypeUtils {
 				for (int i = 1; i < split.length; i++) {
 					sb.append(split[i]);
 				}
-				return sb.toString();
+				return TypeUtils.getClassName(sb.toString());
 			}
 		} catch (Exception e) {
 			return null;
@@ -756,14 +756,28 @@ public class TypeUtils {
     	return edmType != null && edmType.toLowerCase().startsWith("collection");
     }
     
+    public static String getClassName(String name) {
+    	name = ReflectUtils.normalize(name);
+        return name.substring(0, 1).toUpperCase() + name.substring(1);
+    }
+    
     /**
-     * Checks if is edm simple type for which the type starts with "EDM".
+     * Checks if is edm simple type for which the type starts with "EDM" and ends with
+     * either of EDM type like EDM.Int64/EDM.Date
      *
      * @param edmType the edm type
      * @return true, if is edm simple type
      */
     public static boolean isEdmSimpleType(String edmType){
-    	return edmType != null && edmType.toLowerCase().startsWith("edm");
+    	boolean isSimple = false;
+    	if(edmType != null){
+    		if(edmType.toLowerCase().startsWith("edm")){
+    			if(!TypeUtils.toJavaTypeName(edmType).toLowerCase().endsWith("object")){
+    				isSimple = true;
+    			}
+    		}
+    	}
+    	return isSimple;
     }
     
     /**

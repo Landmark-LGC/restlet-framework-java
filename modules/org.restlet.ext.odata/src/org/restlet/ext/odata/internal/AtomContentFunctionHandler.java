@@ -11,7 +11,10 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
 import org.restlet.Context;
+import org.restlet.ext.odata.internal.edm.FunctionImport;
+import org.restlet.ext.odata.internal.edm.Metadata;
 import org.restlet.ext.odata.internal.edm.TypeUtils;
+import org.restlet.ext.odata.xml.AtomFeedHandler;
 import org.restlet.ext.xml.format.XmlFormatParser;
 import org.restlet.representation.Representation;
 
@@ -21,54 +24,116 @@ import org.restlet.representation.Representation;
  * 
  * @author Akshay
  */
-public class AtomContentFunctionHandler extends XmlFormatParser implements FunctionContentHandler {
+public class AtomContentFunctionHandler<T> extends XmlFormatParser implements FunctionContentHandler {
+
+	Representation representation;
+	Class<?> entityClass;
+	FunctionImport function;
+	T entity;
+	
+	public AtomContentFunctionHandler(Class<?> entityClass, Representation representation,
+			FunctionImport function, Metadata metadata, T entity) {
+		this.entityClass = entityClass;
+		//this.metadata = metadata;
+		this.function = function;
+		this.representation = representation;
+		this.entity = entity;
+	}
 
 	/* (non-Javadoc)
-	 * @see org.restlet.ext.odata.internal.FunctionContentHandler#parseResult(java.lang.Class, org.restlet.representation.Representation, 
-	 * java.lang.String, java.util.List)
+	 * @see org.restlet.ext.odata.internal.FunctionContentHandler#parseResult()
 	 */
-	@SuppressWarnings({ "unused", "unchecked", "rawtypes" })
-	public Object parseResult(Class<?> classType,
-			Representation representation, String functionName, List<?> entity) {
+	@SuppressWarnings({ "unchecked"})
+	public Object parseResult() {
 		try {
 			XMLInputFactory factory = XMLInputFactory.newInstance();
 			XMLEventReader reader = factory.createXMLEventReader(representation.getReader());
 
+            String edmReturnType = this.function.getReturnType();
 			while (reader.hasNext()) {
 				XMLEvent event = reader.nextEvent();
 				StartElement startElement = null;
 
-				if (event.isEndElement()
+				if (event.isEndDocument() || (event.isEndElement()
 						&& startElement != null
 						&& event.asEndElement().getName()
-								.equals(startElement.getName())) {
+								.equals(startElement.getName()))) {
 					break;
 				}
 
-				if (isStartElement(event, new QName(XmlFormatParser.NS_DATASERVICES, functionName))) {
+				if (isStartElement(event, new QName(XmlFormatParser.NS_DATASERVICES, function.getName()))) {
 					startElement = event.asStartElement();
 				}
 
 				if (event.isStartElement()
 						&& event.asStartElement().getName().getNamespaceURI()
-								.equals(NS_DATASERVICES)
-						&& event.asStartElement().getName()
-								.equals(DATASERVICES_ELEMENT)) {
-					if (entity instanceof List) {
-						Object value = TypeUtils.convert(classType,
-								reader.getElementText());
-						((List) entity).add(value);
+								.equals(NS_DATASERVICES)) {
+					if (entity instanceof List) { // collection
+						this.parseCollection(reader, startElement);
+					} else { // simple
+						if(TypeUtils.isEdmSimpleType(edmReturnType)){ // Return type startswith EDM : Simple
+							entity = (T) TypeUtils.fromEdm(reader.getElementText(), edmReturnType);
+						} else {
+							AtomFeedHandler.parseProperties(reader,
+									event.asStartElement(), entity);
+						}
 					}
 				}
 			}
 		} catch (XMLStreamException e) {
 			Context.getCurrentLogger().warning(
-                    "Cannot parse the xml due to Stream Exception: " + e.getMessage());
+                    "Cannot parse the function xml due to Stream Exception: " + e.getMessage());
 		} catch (IOException e) {
 			Context.getCurrentLogger().warning(
-                    "Cannot parse the xml due to IO Exception: " + e.getMessage());
+                    "Cannot parse the function xml due to IO Exception: " + e.getMessage());
 		}
 		return entity;
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private void parseCollection(XMLEventReader reader, StartElement startElement) {
+		try {
+			boolean isPrimitiveCollection = TypeUtils.isEdmSimpleType(TypeUtils.getCollectionType(this.function.getReturnType()));
+			while (reader.hasNext()) {
+				XMLEvent event = reader.nextEvent();
+
+				if (event.isEndElement()
+						&& event.asEndElement().getName()
+								.equals(startElement.getName())) {
+					//return entity;
+					return;
+				}
+				if (event.isStartElement()
+						&& event.asStartElement().getName()
+								.getNamespaceURI()
+								.equals(NS_DATASERVICES)
+						&& event.asStartElement().getName()
+								.equals(DATASERVICES_ELEMENT)) {
+					if (isPrimitiveCollection) { // simple type
+						// just add value to list
+						Object value = TypeUtils.convert(entityClass,
+								reader.getElementText());
+						((List) entity).add(value);
+					} else { // complex type
+						Object obj = entityClass.newInstance();
+						// create a new instance and populate the
+						// properties
+						AtomFeedHandler.parseProperties(reader,
+								event.asStartElement(), obj);
+						((List) entity).add(obj);
+					}
+				}
+			}
+		} catch (XMLStreamException e) {
+			Context.getCurrentLogger().warning(
+                    "Cannot parse the collection xml due to Stream Exception: " + e.getMessage());
+		} catch (InstantiationException e) {
+			Context.getCurrentLogger().warning(
+                    "Cannot parse the collection xml due to Stream Exception: " + e.getMessage());
+		} catch (IllegalAccessException e) {
+			Context.getCurrentLogger().warning(
+                    "Cannot parse the collection xml due to Stream Exception: " + e.getMessage());
+		}
 	}
 			
 }
