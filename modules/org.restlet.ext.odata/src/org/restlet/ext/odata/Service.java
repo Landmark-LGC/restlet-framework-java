@@ -1284,13 +1284,28 @@ public class Service {
         EntityType type = metadata.getEntityType(entity.getClass());
 		ClientResource resource = createResource(getSubpath(entity));
         if (type.isBlob()) {
-			InputStream inputStream = this.handleStreamingWithSlug(entity, type);
-			if (null != inputStream || isUpdateStreamData) {//Check for null inputstream and isUpdateStreamData=true then upadate null to stream data
-				resource.put(inputStream, slug, contentType);
-			}
-			// now do merge request for non-stream properties
-			this.mergeEntity(entity);
-		} else {
+			List<Property> properties = type.getProperties();
+    		Iterator<Property> iterator = properties.iterator();
+    		
+    		while (iterator.hasNext()) {
+				Property prop = iterator.next();
+				// find the streaming property from entity and assign stream value to it.
+				if (prop.getType().getName().contains("Stream")) { 
+					Object propertyObject = ReflectUtils.invokeGetter(entity,
+							prop.getNormalizedName());
+					if (null != propertyObject) {
+						StreamReference streamReference = (StreamReference) propertyObject;
+						if (streamReference != null
+								&& streamReference.isUpdateStreamData()) {
+							updateNamedStream(entity, prop.getName(),
+									streamReference);
+						}
+					}			
+               }
+    		}
+    		// now do merge request for non-stream properties
+    		this.mergeEntity(entity);
+    	} else {
 			try {
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				if (FormatType.ATOM.equals(this.getFormatType())) {
@@ -1323,6 +1338,27 @@ public class Service {
 			} finally {
 				this.latestRequest = resource.getRequest();
 				this.latestResponse = resource.getResponse();
+			}
+		}
+    }
+    
+    /**
+     * Update named stream.
+     *
+     * @param entity the entity
+     * @param columnName the column name
+     * @param sr the StreamReference
+     * @throws Exception
+     */
+    public void updateNamedStream(Object entity, String columnName, StreamReference sr) throws Exception {
+        if (getMetadata() == null || entity == null) {
+            return;
+        }
+        EntityType type = metadata.getEntityType(entity.getClass());
+		ClientResource resource = createResource(getSubpath(entity) + "/" + columnName);
+        if (type.isBlob()) {
+			if (null != sr) {
+				resource.put(sr.getInputStream());
 			}
 		}
     }
