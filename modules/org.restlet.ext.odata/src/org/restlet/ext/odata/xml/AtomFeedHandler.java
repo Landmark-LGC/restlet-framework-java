@@ -473,6 +473,8 @@ public class AtomFeedHandler<T> extends XmlFormatParser implements
 					// handle Author tag completely and create person object.
 					p = new Person();
 					parseAuthor(reader, p, event);
+				} else if (isStartElement(event, ATOM_CATEGORY)) {
+					// Do nothing - skip category
 				} else if (isStartElement(event, ATOM_CONTENT)) {
 					contentType = getAttributeValueIfExists(event.asStartElement(),
 							"type");
@@ -514,12 +516,17 @@ public class AtomFeedHandler<T> extends XmlFormatParser implements
 									.getDeclaredFields()) {
 								Class<?> type = field.getType();							
 								if(type.getName().contains("StreamReference")){
-									Reference baseReference = new Reference(baseURL);
-								    StreamReference streamReference = new StreamReference(baseReference,relativeURL);
-								    streamReference.setContentType(contentType);
-								    ReflectUtils.invokeSetter(entity,
-												ReflectUtils.normalize(field.getName()), streamReference);
-								    break;
+									for (Link link : rt.getLinks()){
+										if(field.getName().equalsIgnoreCase(link.getTitle())){
+											Reference baseReference = new Reference(baseURL);
+										    StreamReference streamReference = new StreamReference(baseReference, link.getHref().getIdentifier());
+										    streamReference.setContentType(link.getType().toString());
+										    ReflectUtils.invokeSetter(entity,
+														ReflectUtils.normalize(field.getName()), streamReference);
+										    
+										    break;
+									    }
+								    }
 								}
 							}
 						}
