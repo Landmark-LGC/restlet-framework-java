@@ -473,6 +473,8 @@ public class AtomFeedHandler<T> extends XmlFormatParser implements
 					// handle Author tag completely and create person object.
 					p = new Person();
 					parseAuthor(reader, p, event);
+				} else if (isStartElement(event, ATOM_CATEGORY)) {
+					// Do nothing - skip category
 				} else if (isStartElement(event, ATOM_CONTENT)) {
 					contentType = getAttributeValueIfExists(event.asStartElement(),
 							"type");
@@ -601,7 +603,6 @@ public class AtomFeedHandler<T> extends XmlFormatParser implements
 					                    "Cannot parse the entry due to: " + e1.getMessage());
 							}
 						}
-						e.getLinks().addAll(rt.getLinks());
 						rt = e;
 					}
 				}

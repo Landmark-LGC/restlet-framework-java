@@ -1350,18 +1350,20 @@ public class Service {
      * @param sr the StreamReference
      * @throws Exception
      */
-    public void updateNamedStream(Object entity, String columnName, StreamReference sr) throws Exception {
-        if (getMetadata() == null || entity == null) {
-            return;
-        }
-        EntityType type = metadata.getEntityType(entity.getClass());
-		ClientResource resource = createResource(getSubpath(entity) + "/" + columnName);
-        if (type.isBlob()) {
+	public void updateNamedStream(Object entity, String columnName,
+			StreamReference sr) throws Exception {
+		if (getMetadata() == null || entity == null) {
+			return;
+		}
+		EntityType type = metadata.getEntityType(entity.getClass());
+		if (type.isBlob()) {
 			if (null != sr) {
+				ClientResource resource = createResource(getSubpath(entity)
+						+ "/" + columnName);
 				resource.put(sr.getInputStream());
 			}
 		}
-    }
+	}
 
     /**
     * Method for merger operation.
