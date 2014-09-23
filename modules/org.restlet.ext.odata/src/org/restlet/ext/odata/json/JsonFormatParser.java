@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.restlet.Context;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.restlet.ext.atom.Feed;
 import org.restlet.ext.odata.internal.edm.ComplexProperty;
 import org.restlet.ext.odata.internal.edm.ComplexType;
@@ -18,6 +19,7 @@ import org.restlet.ext.odata.internal.edm.TypeUtils;
 import org.restlet.ext.odata.internal.reflect.ReflectUtils;
 import org.restlet.ext.odata.json.JsonStreamReaderFactory.JsonStreamReader;
 import org.restlet.ext.odata.json.JsonStreamReaderFactory.JsonStreamReader.JsonEvent;
+import org.restlet.ext.odata.streaming.StreamReference;
 
 /**
  * The Class JsonFormatParser is base abstract class to all supported json
@@ -96,8 +98,9 @@ public abstract class JsonFormatParser<T> {
 	protected static final String FUNCTIONS_PROPERTY = "functions";
 	protected static final String RESULTS_PROPERTY = "results";
 	protected static final String DATA_PROPERTY = "d";
-	protected static final String MEDIA_SOURCE = "media_src";
+	protected static final String MEDIA_SRC = "media_src";
 	protected static final String MEDIA_CONTENT_TYPE = "content_type";
+	protected static final String MEDIA_RESOURCE = "__mediaresource";
 
 	protected Feed parseFeed(JsonStreamReader jsr, Class<?> entityClass) {
 		try {
@@ -160,7 +163,7 @@ public abstract class JsonFormatParser<T> {
 				this.ensureEndProperty(event = jsr.nextEvent());
 				jemd.etag = event.asEndProperty().getValue();
 			} else if (event.isStartProperty()
-					&& MEDIA_SOURCE.equals(event.asStartProperty().getName())) {
+					&& MEDIA_SRC.equals(event.asStartProperty().getName())) {
 				this.ensureEndProperty(event = jsr.nextEvent());
 				jemd.mediaSrc = event.asEndProperty().getValue();
 			} else if (event.isStartProperty()
@@ -344,7 +347,40 @@ public abstract class JsonFormatParser<T> {
 					Object o = ReflectUtils.getPropertyObject(entity, name);
 					this.parseInlineEntities(jsr, name, entity, o);
 				}
-			} else if (event.isStartProperty()) {
+			} else if (MEDIA_RESOURCE.equals(event.asStartProperty().getName())) {
+				event = jsr.nextEvent();
+				this.ensureStartObject(event);
+				// skipping edit media property and value.
+				jsr.nextEvent();
+				jsr.nextEvent();
+				event = jsr.nextEvent();
+				
+				if(MEDIA_SRC.equals(event.asStartProperty().getName())){
+					String baseURL = null;
+					String metadataref = metadata.getMetadataRef()
+							.getIdentifier();
+					if (metadataref != null && !metadataref.equals("")) {
+						baseURL = metadataref.substring(0,
+								metadataref.lastIndexOf("/"));
+
+					}
+					
+					Reference baseReference = new Reference(baseURL);
+					event = jsr.nextEvent();
+				    StreamReference streamReference = new StreamReference(baseReference, event.asEndProperty().getValue());
+				    // Skip the content type property name 
+				    jsr.nextEvent();
+				    // Get the content type property value 
+				    event = jsr.nextEvent();
+				    streamReference.setContentType(event.asEndProperty().getValue());
+				    ReflectUtils.invokeSetter(entity,
+								ReflectUtils.normalize(name), streamReference);
+				}
+				
+				this.ensureEndObject(jsr.nextEvent());// Ending the mediaresource object
+				this.ensureEndProperty(jsr.nextEvent()); 
+				this.ensureEndObject(jsr.nextEvent());// Ending the property object
+			}else if (event.isStartProperty()) {
 				// complex object within entity
 				// EntityType entityType =
 				// this.metadata.getEntityType(entity.getClass());
