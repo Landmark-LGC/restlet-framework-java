@@ -1,5 +1,7 @@
 package org.restlet.test.ext.odata.function;
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.restlet.Component;
 import org.restlet.Context;
@@ -37,7 +39,7 @@ public class FunctionTestCase extends RestletTestCase {
      */
     public void testFunction() {
     	FunctionService service = new FunctionService();
-		Nextval_t nextval = null;
+    	List<Nextval_t> nextval = null;
 		try {
 			nextval = service.nextval("RCompany");
 		} catch (Exception e) {
@@ -45,7 +47,7 @@ public class FunctionTestCase extends RestletTestCase {
                     "Exception occurred while calling a function: " + e.getMessage());
 			Assert.fail();
 		}
-		assertEquals("534", nextval.getSysGenId().toString());
+		assertEquals("534", nextval.get(0).getSysGenId().toString());
 	
     }
 

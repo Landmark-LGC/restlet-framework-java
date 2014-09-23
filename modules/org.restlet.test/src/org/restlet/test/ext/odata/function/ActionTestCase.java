@@ -53,8 +53,8 @@ public class ActionTestCase extends RestletTestCase {
   		} 	
   		assertNotNull(values);
   		assertTrue(values.size()>0);
-  		assertEquals("20.0", values.get(0));
-  		assertEquals("65.6", values.get(1));
+  		assertEquals(20.0d, values.get(0));
+  		assertEquals(65.6d, values.get(1));
       }
 
 }
