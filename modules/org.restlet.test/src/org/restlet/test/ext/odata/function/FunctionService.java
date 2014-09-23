@@ -28,14 +28,16 @@ public class FunctionService extends Service {
 		super("http://localhost:8111/Unit.svc");
 	}
 
-	public Nextval_t nextval(String tableName) {
-		Nextval_t nextval = null;
+	@SuppressWarnings("unchecked")
+	public List<Nextval_t> nextval(String tableName) {
+		List<Nextval_t> nextval = new ArrayList<Nextval_t>();
 		Series<Parameter> parameters = new Series<Parameter>(Parameter.class);
 		Parameter paramtableName = new Parameter();
 		paramtableName.setName("tableName");
 		paramtableName.setValue(tableName.toString());
 		parameters.add(paramtableName);
-		nextval = (Nextval_t) invokeFunction("nextval", parameters, Nextval_t.class, nextval);
+		nextval = (List<Nextval_t>) invokeFunction("nextval", parameters,
+				Nextval_t.class, nextval);
 		return nextval;
 	}
 
@@ -63,7 +65,9 @@ public class FunctionService extends Service {
 		paramnullValue.setName("nullValue");
 		paramnullValue.setValue(nullValue.toString());
 		parameters.add(paramnullValue);
-		convertDoubleArray = (List<java.lang.Double>) invokeFunction("convertDoubleArray", parameters, java.lang.Double.class, convertDoubleArray);
+		convertDoubleArray = (List<java.lang.Double>) invokeFunction(
+				"convertDoubleArray", parameters, java.lang.Double.class,
+				convertDoubleArray);
 		return convertDoubleArray;
 	}
 }

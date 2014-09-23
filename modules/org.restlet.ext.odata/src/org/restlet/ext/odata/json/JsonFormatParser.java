@@ -213,8 +213,8 @@ public abstract class JsonFormatParser<T> {
 				// scalar property
 				Property property = this.metadata.getProperty(entity, name);
 				if (property == null) {
-					// AssociationEnd association = this.metadata.getAssociation(entityType, name);
-					// FIXME Onkar : Handle inline entities later
+					// Relationship/Association between entities
+					// It won't end up here as it is already handled in parseInlineEntites.
 				} else {
 					if (!(property instanceof ComplexProperty)) { // simple property
 						Type type = property.getType();
@@ -234,7 +234,7 @@ public abstract class JsonFormatParser<T> {
 							}
 						}
 					} else { 
-						// collection type or complex type the only context that lands us here is a null
+						// collection type or complex type. The only context that lands us here is a null
 						// value for a complex property do nothing as we already have null set for it.
 					}
 				}

@@ -2,12 +2,12 @@
 <edmx:Edmx Version="1.0"
 	xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx">
 	<edmx:DataServices>
-		<Schema Namespace="org.restlet.test.ext.odata.crudActionAndFunction"
+		<Schema Namespace="EDM"
 			xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices"
 			xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
 			xmlns="http://schemas.microsoft.com/ado/2006/04/edm">
 			<ComplexType Name="nextval_t">
-				<Property Name="SysGenId" Nullable="true" Type="Edm.Int32" />
+				<Property Name="SysGenId" Nullable="true" Type="Edm.String" />
 			</ComplexType>
 			<EntityContainer Name="UnitServiceDataModel"
 				m:IsDefaultEntityContainer="true">
@@ -55,7 +55,7 @@
 					</Parameter>
 				</FunctionImport>
 
-				<FunctionImport	Name="nextval" ReturnType="Edm.String" m:HttpMethod="GET">
+				<FunctionImport	Name="nextval" ReturnType="Collection(EDM.nextval_t)" m:HttpMethod="GET">
 					<Parameter Name="tableName" Type="Edm.String" Mode="In"
 						Nullable="false" />
 				</FunctionImport>

@@ -35,7 +35,6 @@ public enum FormatType {
 		return mediaTypes;
 	}
 
-	//TODO:Onkar do we need to compare for hardcoded value strings belows. also modify javadocs
 	/**
 	 * Return the format type corresponding to argument.
 	 *
