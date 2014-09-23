@@ -6,7 +6,7 @@ package org.restlet.test.ext.odata.function;
 */
 public class Nextval_t {
 
-    private Integer sysGenId;
+    private String sysGenId;
 
     /**
      * Constructor without parameter.
@@ -21,7 +21,7 @@ public class Nextval_t {
     *
     * @return The value of the "sysGenId" attribute.
     */
-   public Integer getSysGenId() {
+   public String getSysGenId() {
       return sysGenId;
    }
 
@@ -32,7 +32,7 @@ public class Nextval_t {
     * @param sysGenId
     *     The value of the "sysGenId" attribute.
     */
-   public void setSysGenId(Integer sysGenId) {
+   public void setSysGenId(String sysGenId) {
       this.sysGenId = sysGenId;
    }
 
