@@ -14,6 +14,8 @@
 		<author>
 			<name />
 		</author>
+		<link rel="http://schemas.microsoft.com/ado/2007/08/dataservices/edit-media/attachment" type="application/octet-stream" 
+			title="attachment" href="Cafes('30')/attachment" /> 
 		<link rel="edit" title="Cafe" href="Cafes('30')" />
 		<category term="org.restlet.test.ext.odata.crud.Cafe"
 			scheme="http://schemas.microsoft.com/ado/2007/08/dataservices/scheme" />
