@@ -14,23 +14,20 @@ import org.restlet.data.Method;
 import org.restlet.data.Protocol;
 import org.restlet.data.Status;
 import org.restlet.routing.Router;
+import org.restlet.test.ext.odata.model.RestletOdataTestHelper;
 
 /**
  * Sample application that simulates the CUD operation on entities.
  * 
  */
-@SuppressWarnings("unused")
 public class CafeCrudApplication extends Application {
 
 	private static class MyClapRestlet extends Restlet {
 		String file;
 
-		boolean updatable;
-
 		public MyClapRestlet(Context context, String file, boolean updatable) {
 			super(context);
 			this.file = file;
-			this.updatable = updatable;
 		}
 
 		@Override
@@ -39,11 +36,14 @@ public class CafeCrudApplication extends Application {
 				String uri = "/"
 						+ this.getClass().getPackage().getName()
 								.replace(".", "/") + "/" + file;
-
+				String extention= RestletOdataTestHelper.getMediaType(request);
+				if(file.equalsIgnoreCase("metadata")){
+					extention=".xml";
+				}
 				Response r = getContext().getClientDispatcher().handle(
 						new Request(Method.GET, LocalReference
 								.createClapReference(LocalReference.CLAP_CLASS,
-										uri + ".xml")));
+										uri + extention)));
 				response.setEntity(r.getEntity());
 				response.setStatus(r.getStatus());
 
@@ -64,6 +64,9 @@ public class CafeCrudApplication extends Application {
 			}
 
 		}
+
+		
+		
 	}
 
 	@Override

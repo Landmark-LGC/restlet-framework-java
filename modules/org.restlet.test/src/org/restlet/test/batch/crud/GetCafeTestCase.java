@@ -17,7 +17,7 @@ import org.restlet.ext.odata.batch.request.impl.GetEntityRequest;
 import org.restlet.ext.odata.batch.response.BatchResponse;
 import org.restlet.ext.odata.batch.response.ChangeSetResponse;
 import org.restlet.test.RestletTestCase;
-import org.restlet.test.ext.odata.crud.Cafe;
+import org.restlet.test.ext.odata.model.Cafe;
 
 /**
  * Test case for RestletBatch service for GET operation on entities.

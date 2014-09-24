@@ -8,66 +8,64 @@ import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.Restlet;
 import org.restlet.data.CharacterSet;
-import org.restlet.data.Form;
 import org.restlet.data.LocalReference;
 import org.restlet.data.Method;
 import org.restlet.data.Protocol;
 import org.restlet.data.Status;
 import org.restlet.routing.Router;
+import org.restlet.test.ext.odata.model.RestletOdataTestHelper;
 
 /**
- * Sample application that simulates cud operation for complex entities and
- * collection.
+ * Sample application that simulates the CUD operation on entities.
+ * 
  */
 public class CafeCrudApplication extends Application {
+
 	private static class MyClapRestlet extends Restlet {
 		String file;
-
-		@SuppressWarnings("unused")
-		boolean updatable;
 
 		public MyClapRestlet(Context context, String file, boolean updatable) {
 			super(context);
 			this.file = file;
-			this.updatable = updatable;
 		}
 
-		@SuppressWarnings("unused")
 		@Override
 		public void handle(Request request, Response response) {
-
 			if (Method.GET.equals(request.getMethod())) {
-				Form form = request.getResourceRef().getQueryAsForm();
 				String uri = "/"
 						+ this.getClass().getPackage().getName()
 								.replace(".", "/") + "/" + file;
-
+				String extention = RestletOdataTestHelper.getMediaType(request);
+				if (file.equalsIgnoreCase("metadata")) {
+					extention = ".xml";
+				}
 				Response r = getContext().getClientDispatcher().handle(
 						new Request(Method.GET, LocalReference
 								.createClapReference(LocalReference.CLAP_CLASS,
-										uri + ".xml")));
+										uri + extention)));
 				response.setEntity(r.getEntity());
 				response.setStatus(r.getStatus());
 
-			} else if (Method.POST.equals(request.getMethod()) || Method.PUT.equals(request.getMethod())) {
-				String rep=null;
+			} else if (Method.POST.equals(request.getMethod())
+					|| Method.PUT.equals(request.getMethod())) {
+				String rep = null;
 				try {
 					rep = request.getEntity().getText();
 				} catch (IOException e) {
 					response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 				}
-				if(null != rep && !rep.isEmpty()){
+				if (null != rep && !rep.isEmpty()) {
 					response.setStatus(Status.SUCCESS_OK);
 				}
-				
+
 			} else if (Method.DELETE.equals(request.getMethod())) {
 				response.setStatus(Status.SUCCESS_NO_CONTENT);
 
 			}
 
 		}
-	}
 
+	}
 
 	@Override
 	public Restlet createInboundRoot() {

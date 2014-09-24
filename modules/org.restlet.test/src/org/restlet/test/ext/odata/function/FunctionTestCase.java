@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.data.Protocol;
+import org.restlet.ext.xml.format.FormatType;
 import org.restlet.test.RestletTestCase;
 
 /**
@@ -37,9 +38,23 @@ public class FunctionTestCase extends RestletTestCase {
     /**
      * Tests the function to return correct value.
      */
-    public void testFunction() {
+    public void testFunctionAtom() {
     	FunctionService service = new FunctionService();
-    	List<Nextval_t> nextval = null;
+    	testFunction(service);
+	
+    }
+    
+    /**
+     * Test function json.
+     */
+    public void testFunctionJson() {
+    	FunctionService service = new FunctionService();
+    	service.setFormatType(FormatType.JSONVERBOSE);
+    	testFunction(service);
+    }
+
+	private void testFunction(FunctionService service) {
+		List<Nextval_t> nextval = null;
 		try {
 			nextval = service.nextval("RCompany");
 		} catch (Exception e) {
@@ -48,7 +63,6 @@ public class FunctionTestCase extends RestletTestCase {
 			Assert.fail();
 		}
 		assertEquals("534", nextval.get(0).getSysGenId().toString());
-	
-    }
+	}
 
 }

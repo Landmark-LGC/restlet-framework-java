@@ -10,7 +10,11 @@ import org.restlet.Response;
 import org.restlet.data.Protocol;
 import org.restlet.data.Status;
 import org.restlet.ext.odata.Query;
+import org.restlet.ext.xml.format.FormatType;
 import org.restlet.test.RestletTestCase;
+import org.restlet.test.ext.odata.model.Cafe;
+import org.restlet.test.ext.odata.model.Point;
+import org.restlet.test.ext.odata.model.StructAny;
 
 /**
  * Test case for OData service for CUD operation on complex entities and
@@ -51,8 +55,19 @@ public class ODataCafeCrudTestCase extends RestletTestCase {
 	 */
 	public void testCrudComplexEntity() {
 		CafeService service = new CafeService();
+		doCrudOperation(service);
+	}
+	
+	/**
+	 * Test crud complex entity json.
+	 */
+	public void testCrudComplexEntityJson() {
+		CafeService service = new CafeService();
+		service.setFormatType(FormatType.JSONVERBOSE);
+		doCrudOperation(service);
+	}
 
-		// create.
+	private void doCrudOperation(CafeService service) {
 		Cafe cafe = buildCafeEntity();
 		
 		try {

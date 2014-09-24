@@ -1,4 +1,4 @@
-package org.restlet.test.ext.odata.complexcrud.json;
+package org.restlet.test.ext.odata.model;
 
 import java.util.ArrayList;
 import java.util.List;
