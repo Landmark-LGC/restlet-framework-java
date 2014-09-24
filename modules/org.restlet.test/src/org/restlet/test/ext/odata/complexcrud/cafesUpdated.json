@@ -1,0 +1,39 @@
+{
+   "d":{
+      "__metadata":{
+         "uri":"http://localhost:8111/Cafe.svc/Cafes('30')",
+         "type":"org.restlet.test.ext.odata.crud.Cafe"
+      },
+      "ID":30,
+      "Name":"TestName-updated",
+      "ZipCode":111111,
+      "City":"TestCity",
+	  "spatial":{
+         "geo_type":"LINESTRING",
+         "x":{
+            "results":[
+               "7.29",
+               "7.29"  
+            ]
+         },
+         "y":{
+            "results":[
+               "65.32000000000001",
+               "65.32000000000001"
+            ]
+         },
+         
+         "properties": {
+                "results": [
+                    {
+                        "name": "md",
+                        "type": "FLOAT",
+                        "unit": "meters",
+                        "unitType": "depth measure",
+                        "values": "[0.0,2670.9678]"
+                    }
+                ]
+            }
+      }
+   }
+}
