@@ -1,7 +1,4 @@
-package org.restlet.test.ext.odata.complexcrud.json;
-
-import java.util.ArrayList;
-import java.util.List;
+package org.restlet.test.ext.odata.crud;
 
 import org.junit.Assert;
 import org.restlet.Component;
@@ -12,13 +9,13 @@ import org.restlet.data.Status;
 import org.restlet.ext.odata.Query;
 import org.restlet.ext.xml.format.FormatType;
 import org.restlet.test.RestletTestCase;
+import org.restlet.test.ext.odata.model.Cafe;
 
 /**
- * Test case for OData service for CUD operation on complex entities and
- * collection.
+ * Test case for OData service for CUD operation on entities.
  * 
  */
-public class ODataCafeCrudJsonTestCase extends RestletTestCase {
+public class ODataSimpleCafeCrudTestCase extends RestletTestCase {
 
 	/** Inner component. */
 	private Component component = new Component();
@@ -34,7 +31,7 @@ public class ODataCafeCrudJsonTestCase extends RestletTestCase {
 		component.getServers().add(Protocol.HTTP, 8111);
 		component.getClients().add(Protocol.CLAP);
 		component.getDefaultHost().attach("/Cafe.svc",
-				new CafeCrudJsonApplication());
+				new CafeCrudApplication());
 		component.start();
 
 		service = new CafeService();
@@ -48,38 +45,49 @@ public class ODataCafeCrudJsonTestCase extends RestletTestCase {
 	}
 
 	/**
-	 * Test method for crud operation on complex entities and collection.
+	 * Test method for crud operation on simple entities.
 	 */
-	public void testCrudComplexEntity() {
+	public void testCrudSimpleEntity() {
+		CafeService service = new CafeService();
+		doCrudOperation(service);
+	}
+	
+	/**
+	 * Test crud simple entity json.
+	 */
+	public void testCrudSimpleEntityJson() {
 		CafeService service = new CafeService();
 		service.setFormatType(FormatType.JSONVERBOSE);
-		// create.
-		Cafe cafe = buildCafeEntity();
+		doCrudOperation(service);
+	}
 
+	/**
+	 * Do crud operation.
+	 *
+	 * @param service the service
+	 */
+	private void doCrudOperation(CafeService service) {
+		// create.
+		Cafe cafe = new Cafe();
+		cafe.setId("30");
+		cafe.setName("TestName");
+		cafe.setCity("TestCity");
+		cafe.setZipCode(111111);
 		try {
 			service.addEntity(cafe);
 		} catch (Exception e) {
 			Context.getCurrentLogger().warning(
-					"Cannot add entity due to: " + e.getMessage());
+                    "Cannot add entity due to: " + e.getMessage());
 			Assert.fail();
 		}
+
 		Query<Cafe> query = service.createCafeQuery("/Cafes");
 		Cafe cafe1 = query.iterator().next();
 		assertEquals("TestName", cafe1.getName());
 		assertEquals("30", cafe1.getId());
 		assertEquals(111111, cafe1.getZipCode());
-		// assert complex property.
-		assertNotNull(cafe1.getSpatial());
-		assertNotNull(cafe1.getSpatial().getGeo_type());
-		// assert collection of complex property.
-		assertTrue(cafe1.getSpatial().getProperties().size() > 0);
-		StructAny structAny = cafe1.getSpatial().getProperties().get(0);
-		assertNotNull(structAny);
-		assertEquals("md", structAny.getName());
-
 		Response latestResponse = query.getService().getLatestResponse();
 		assertEquals(Status.SUCCESS_OK, latestResponse.getStatus());
-
 		// // Update.
 		cafe1.setName("TestName-update");
 
@@ -87,64 +95,26 @@ public class ODataCafeCrudJsonTestCase extends RestletTestCase {
 			service.updateEntity(cafe1);
 		} catch (Exception e) {
 			Context.getCurrentLogger().warning(
-					"Cannot update entity due to: " + e.getMessage());
+                    "Cannot update entity due to: " + e.getMessage());
 			Assert.fail();
 		}
 
 		Query<Cafe> query3 = service.createCafeQuery("/Cafes('30')");
 
 		Cafe cafe2 = query3.iterator().next();
-
 		assertEquals("TestName-updated", cafe2.getName());
-		assertNotNull(cafe1.getSpatial());
 		latestResponse = query3.getService().getLatestResponse();
 		assertEquals(Status.SUCCESS_OK, latestResponse.getStatus());
-
 		// Delete
 		try {
 			service.deleteEntity(cafe2);
 		} catch (Exception e) {
 			Context.getCurrentLogger().warning(
-					"Cannot delete entity due to: " + e.getMessage());
+                    "Cannot delete entity due to: " + e.getMessage());
 			Assert.fail();
 		}
 		latestResponse = query3.getService().getLatestResponse();
 		assertEquals(Status.SUCCESS_NO_CONTENT, latestResponse.getStatus());
-	}
-
-	private Cafe buildCafeEntity() {
-		Cafe cafe = new Cafe();
-		cafe.setId("30");
-		cafe.setName("TestName");
-		cafe.setCity("TestCity");
-		cafe.setZipCode(111111);
-
-		Point point = new Point();
-		point.setGeo_name("GEONAME");
-		point.setGeo_type("LINESTRING");
-
-		StructAny structAny = new StructAny();
-		structAny.setName("md");
-		structAny.setType("FLOAT");
-		structAny.setUnit("meters");
-		structAny.setUnitType("depth measure");
-		structAny.setValues("[0.0,2670.9678]");
-
-		List<StructAny> properties = new ArrayList<StructAny>();
-		properties.add(structAny);
-
-		List<java.lang.Double> x = new ArrayList<java.lang.Double>();
-		x.add(7.29d);
-		x.add(7.29d);
-		List<java.lang.Double> y = new ArrayList<java.lang.Double>();
-		y.add(65.32000000000001d);
-		y.add(65.32000000000001d);
-
-		point.setProperties(properties);
-		point.setX(x);
-		point.setY(y);
-		cafe.setSpatial(point);
-		return cafe;
 	}
 
 }

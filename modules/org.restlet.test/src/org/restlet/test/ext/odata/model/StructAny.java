@@ -1,5 +1,5 @@
 
-package org.restlet.test.ext.odata.complexcrud;
+package org.restlet.test.ext.odata.model;
 
 
 

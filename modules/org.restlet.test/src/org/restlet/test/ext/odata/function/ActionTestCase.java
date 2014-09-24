@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.data.Protocol;
+import org.restlet.ext.xml.format.FormatType;
 import org.restlet.test.RestletTestCase;
 
 /**
@@ -35,12 +36,26 @@ public class ActionTestCase extends RestletTestCase {
         component = null;
         super.tearDown();
     }
+    
     /**
-     * Tests the actions.
+     * Test action atom.
      */
-    public void testAction() {
+    public void testActionAtom() {
     	FunctionService service = new FunctionService();
-  		List<Double> values = null;
+  		testAction(service);
+      }
+    
+    /**
+     * Test action json.
+     */
+    public void testActionJson() {
+    	FunctionService service = new FunctionService();
+    	service.setFormatType(FormatType.JSONVERBOSE);
+  		testAction(service);
+      }
+
+	private void testAction(FunctionService service) {
+		List<Double> values = null;
   		try {
   			List<Double> doubleList = new ArrayList<Double>();
   			doubleList.add(240.0);
@@ -55,6 +70,6 @@ public class ActionTestCase extends RestletTestCase {
   		assertTrue(values.size()>0);
   		assertEquals(20.0d, values.get(0));
   		assertEquals(65.6d, values.get(1));
-      }
+	}
 
 }

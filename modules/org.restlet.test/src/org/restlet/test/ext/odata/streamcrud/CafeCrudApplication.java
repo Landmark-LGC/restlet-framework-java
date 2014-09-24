@@ -28,19 +28,16 @@ import org.restlet.util.Series;
  */
 public class CafeCrudApplication extends Application {
 
-	@SuppressWarnings("unused")
 	private static class MyClapRestlet extends Restlet {
-		String file;		
-		boolean updatable;
+		String file;	
 
 		public MyClapRestlet(Context context, String file, boolean updatable) {
 			super(context);
 			this.file = file;
-			this.updatable = updatable;
 		}
 
-		@Override
 		@SuppressWarnings("unchecked")
+		@Override
 		public void handle(Request request, Response response) {
 			if (Method.GET.equals(request.getMethod())) {
 				

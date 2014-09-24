@@ -10,6 +10,7 @@ import org.restlet.data.LocalReference;
 import org.restlet.data.Method;
 import org.restlet.data.Protocol;
 import org.restlet.routing.Router;
+import org.restlet.test.ext.odata.model.RestletOdataTestHelper;
 
 /**
  * Sample application that simulates the "Unit" service.
@@ -30,11 +31,14 @@ public class UnitApplication extends Application {
 				String uri = "/"
 						+ this.getClass().getPackage().getName()
 								.replace(".", "/") + "/" + file;
-
+				String extention= RestletOdataTestHelper.getMediaType(request);
+				if(file.equalsIgnoreCase("metadata")){
+					extention=".xml";
+				}
 				Response r = getContext().getClientDispatcher().handle(
 						new Request(Method.GET, LocalReference
 								.createClapReference(LocalReference.CLAP_CLASS,
-										uri + ".xml")));
+										uri + extention)));
 				response.setEntity(r.getEntity());
 				response.setStatus(r.getStatus());
 
@@ -43,10 +47,11 @@ public class UnitApplication extends Application {
 				String uri = "/"
 						+ this.getClass().getPackage().getName()
 								.replace(".", "/") + "/" + file;
+				String extention= RestletOdataTestHelper.getMediaType(request);
 				Response r = getContext().getClientDispatcher().handle(
 						new Request(Method.GET, LocalReference
 								.createClapReference(LocalReference.CLAP_CLASS,
-										uri + ".xml")));
+										uri + extention)));
 				response.setEntity(r.getEntity());
 				response.setStatus(r.getStatus());
 			}
