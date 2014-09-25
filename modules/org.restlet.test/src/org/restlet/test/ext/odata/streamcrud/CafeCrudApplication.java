@@ -45,7 +45,7 @@ public class CafeCrudApplication extends Application {
 						+ this.getClass().getPackage().getName()
 								.replace(".", "/") + "/" + file;
 				//check for request is for MLE 
-				if (request.getOriginalRef().toString().contains("$value")) {
+				if (request.getOriginalRef().toString().contains("attachment")) {
 					InputStream inputStream = null;
 					String str = "TEST";
 					// convert String into InputStream
@@ -65,8 +65,7 @@ public class CafeCrudApplication extends Application {
 					response.setEntity(r.getEntity());
 					response.setStatus(r.getStatus());
 				}
-			} else if (Method.POST.equals(request.getMethod())
-					|| Method.PUT.equals(request.getMethod())) {
+			} else if (Method.POST.equals(request.getMethod())) {
 				// read request header to get slug header and also to get merge
 				// request
 				ConcurrentMap<String, Object> attributes = request
@@ -77,11 +76,7 @@ public class CafeCrudApplication extends Application {
 						.getFirst(HeaderConstants.HEADER_SLUG);
 				Representation entity = request.getEntity();
 				if (first != null) { // contains slug header
-					if(Method.PUT.equals(request.getMethod())){
-						response.setStatus(Status.SUCCESS_OK);
-					} else {
-						response.setStatus(Status.SUCCESS_CREATED);
-					}
+					response.setStatus(Status.SUCCESS_CREATED);
 				} else {
 					first = series.getFirst(HeaderConstants.HEADER_X_HTTP_METHOD, true);
 					if (first != null) {// check for merge request
@@ -98,6 +93,8 @@ public class CafeCrudApplication extends Application {
 				}
 			} else if (Method.DELETE.equals(request.getMethod())) {
 				response.setStatus(Status.SUCCESS_NO_CONTENT);
+			} else if(Method.PUT.equals(request.getMethod())){
+				response.setStatus(Status.SUCCESS_OK);
 			}
 		}
 	}
@@ -113,7 +110,7 @@ public class CafeCrudApplication extends Application {
 		router.attach("/Cafes", new MyClapRestlet(getContext(), "cafes", true));
 		router.attach("/Cafes('30')", new MyClapRestlet(getContext(), "cafes_Updated",
 				true));
-		router.attach("/Cafes('30')/$value", new MyClapRestlet(getContext(),
+		router.attach("/Cafes('30')/attachment", new MyClapRestlet(getContext(),
 				"streamData", true));
 		return router;
 	}

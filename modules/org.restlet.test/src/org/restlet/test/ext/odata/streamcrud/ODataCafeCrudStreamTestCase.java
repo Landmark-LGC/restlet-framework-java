@@ -49,7 +49,7 @@ public class ODataCafeCrudStreamTestCase extends RestletTestCase {
 
 
     public void testStreamingCrudCafe() {
-		/*CafeService service = new CafeService();
+		CafeService service = new CafeService();
 
 		//create.
 		Cafe cafe = new Cafe();
@@ -142,7 +142,7 @@ public class ODataCafeCrudStreamTestCase extends RestletTestCase {
 				Assert.fail();
 			}
 		 latestResponse = query4.getService().getLatestResponse();
-		 assertEquals(Status.SUCCESS_NO_CONTENT, latestResponse.getStatus());*/
+		 assertEquals(Status.SUCCESS_NO_CONTENT, latestResponse.getStatus());
 	
 	
     }
