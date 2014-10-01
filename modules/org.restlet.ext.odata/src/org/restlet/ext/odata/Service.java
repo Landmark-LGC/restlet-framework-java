@@ -35,7 +35,6 @@ package org.restlet.ext.odata;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -64,7 +63,6 @@ import org.restlet.engine.header.HeaderReader;
 import org.restlet.engine.header.HeaderUtils;
 import org.restlet.ext.atom.Content;
 import org.restlet.ext.atom.Entry;
-import org.restlet.ext.atom.Feed;
 import org.restlet.ext.odata.batch.util.RestletBatchRequestHelper;
 import org.restlet.ext.odata.factory.FeedHandlerFactory;
 import org.restlet.ext.odata.internal.FunctionContentHandler;
@@ -134,8 +132,6 @@ public class Service {
     /** The internal logger. */
     private Logger logger;
     
-    private String slug = "";
-    
     private FormatType formatType = FormatType.ATOM;
    
     /** 
@@ -160,12 +156,6 @@ public class Service {
     /** The reference of the WCF service. */
     private Reference serviceRef;
 
-	/** The content type. */
-	private String contentType;
-
-	/** The isUpdateStreamData used to decide update operation on stream. */
-	private boolean isUpdateStreamData;	
-	
 	/** List of cookies used to cache the cookies sent from server. */
 	List<Cookie> cookies;
 	
@@ -232,61 +222,71 @@ public class Service {
      *            The entity to put.
      * @throws Exception
      */
-	public <T> T addEntity(String entitySetName, Object entity) throws Exception {
+    public <T> T addEntity(String entitySetName, Object entity) throws Exception {
 		if (entity != null) {
 			isPostRequest = Boolean.TRUE;
 			ClientResource resource = createResource(entitySetName);
-			if (getMetadata() == null) { 
-				throw new Exception("Can't add entity to this entity set " + resource.getReference()
+			if (getMetadata() == null) {
+				throw new Exception("Can't add entity to this entity set "
+						+ resource.getReference()
 						+ " due to the lack of the service's metadata.");
 			}
 			Metadata metadata = (Metadata) getMetadata();
 			EntityType type = metadata.getEntityType(entity.getClass());
 			Representation rep = null;
 			try {
-				if (type.isBlob()) { // entity type is set to BLOB if hasStream property of an entity is true.
-					
-					InputStream inputStream = this.handleStreamingWithSlug(entity, type);
-					//post the inputstream with slug header.
-					rep = resource.post(inputStream, slug, contentType);
-					
-                    FormatParser<T> feedHandler = FeedHandlerFactory.getParser(this.getFormatType(), type, entity.getClass(), metadata, null);
-                    T newEntity = RestletBatchRequestHelper.getEntity(rep, feedHandler);
-					this.merge(entity, ((Feed) feedHandler.getFeed()).getEntries().get(0).getId()); //merge the remaining properties using merge request.
-					return newEntity;
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				if (FormatType.ATOM.equals(this.getFormatType())) {
+					Entry entry = toEntry(entity);
+					entry.write(baos);
 				} else {
-					ByteArrayOutputStream baos = new ByteArrayOutputStream();
-					if(FormatType.ATOM.equals(this.getFormatType())){
-						Entry entry = toEntry(entity);
-						entry.write(baos);
-					}else{
-						/*
-						 * For JSON verbose implementation we have separate writer 
-						 * which will return the JSON representation of an entity 
-						 * for POST request.
-						 */
-						final JsonFormatWriter r = new JsonFormatWriter(entity, (Metadata) getMetadata(), entity, isPostRequest);
-						r.write(baos);
-					}
-					baos.flush();
-					MediaType mediaType = FormatType.getMediaType(this.getFormatType());
-					StringRepresentation r = new StringRepresentation(baos.toString(), mediaType);
-					// set Accept: header corresponding to media type for. json/atom/jsonverbose
-					resource.getRequest().getClientInfo().accept(mediaType);
-					rep = resource.post(r);
-					// parse the response to populate the newly created entity object
-					
-                    FormatParser<T> feedHandler = FeedHandlerFactory.getParser(this.getFormatType(), type, entity.getClass(), metadata, null);
-                    T newEntity = RestletBatchRequestHelper.getEntity(rep, feedHandler);
-                    return newEntity;
+					/*
+					 * For JSON verbose implementation we have separate writer
+					 * which will return the JSON representation of an entity
+					 * for POST request.
+					 */
+					final JsonFormatWriter r = new JsonFormatWriter(entity,
+							(Metadata) getMetadata(), entity, isPostRequest);
+					r.write(baos);
 				}
+				baos.flush();
+				MediaType mediaType = FormatType.getMediaType(this
+						.getFormatType());
+				StringRepresentation r = new StringRepresentation(
+						baos.toString(), mediaType);
+				/* 
+				 * Set Accept: header corresponding to media type for.
+				 * json/atom/jsonverbose.
+				 */
+				resource.getRequest().getClientInfo().accept(mediaType);
+				rep = resource.post(r);
+				 /*
+				  * Handle the blob type of properties where we need to make 
+				  * separate PUT requests for the same after POSTing the non stream 
+				  * properties of an entity.
+				  */				
+				if (type.isBlob()) {
+					handleStreamProperties(entity, type);
+				}
+
+				// Parse the response to populate the newly created entity object.
+				FormatParser<T> feedHandler = FeedHandlerFactory.getParser(
+						this.getFormatType(), type, entity.getClass(),
+						metadata, null);
+				T newEntity = RestletBatchRequestHelper.getEntity(rep,
+						feedHandler);
+				return newEntity;
+
 			} catch (ResourceException re) {
-				throw new ResourceException(re.getStatus(), "Can't add entity to this entity set "
-						+ resource.getReference());
+				throw new ResourceException(re.getStatus(),
+						"Can't add entity to this entity set "
+								+ resource.getReference());
 			} catch (Exception e) {
-				getLogger().log(Level.WARNING,
-	                    "Can't add the entity : " + " due to " + e.getMessage());
-			}finally {
+				getLogger()
+						.log(Level.WARNING,
+								"Can't add the entity : " + " due to "
+										+ e.getMessage());
+			} finally {
 				isPostRequest = Boolean.FALSE;
 				this.latestRequest = resource.getRequest();
 				this.latestResponse = resource.getResponse();
@@ -295,46 +295,36 @@ public class Service {
 		return null;
 	}
 
-
 	/**
-	 * Method to handle Streaming data for create/update operation.
-	 * It also creates slug header which we need for creating request headers for MLE.
-	 * @param entity
-	 * @param type
-	 * @return
-	 * @throws Exception
+	 * Handle stream properties.
+	 *
+	 * @param entity the entity
+	 * @param type the type
+	 * @throws Exception the exception
 	 */
-    private InputStream handleStreamingWithSlug(Object entity, EntityType type) throws Exception {
-    	List<Property> properties = type.getProperties();
+	private void handleStreamProperties(Object entity, EntityType type)
+			throws Exception {
+		List<Property> properties = type.getProperties();
 		Iterator<Property> iterator = properties.iterator();
-		InputStream inputStream = null;
-		slug="";
-		// Create the SLUG header for Streaming.
-		// As streaming entity requires mandatory fields to be passed as slug header.
-		// Request body contains only stream data. Slug header contains mandatory fields like PK.
+
 		while (iterator.hasNext()) {
 			Property prop = iterator.next();
-			if (!prop.isNullable()) {
-				Object propertyObject = ReflectUtils.getPropertyObject(entity, prop.getNormalizedName());
-				String propName = prop.getName() + "=" + propertyObject.toString();
-				if (slug.isEmpty()) {
-					slug = propName;
-				} else {
-					slug = slug + "," + propName;
+			/* 
+			 * Find the streaming property from entity 
+			 * and assign stream value to it. 
+			 */
+			if (prop.getType().getName().contains("Stream")) {
+				Object propertyObject = ReflectUtils.invokeGetter(
+						entity, prop.getNormalizedName());
+				if (null != propertyObject) {
+					StreamReference streamReference = (StreamReference) propertyObject;
+					if (streamReference != null) {
+						updateNamedStream(entity, prop.getName(),
+								streamReference);
+					}
 				}
-			} else {
-				if (prop.getType().getName().contains("Stream")) { // find the streaming property from entity and assign stream value to it.  
-					Object propertyObject = ReflectUtils.invokeGetter(entity, prop.getNormalizedName());					
-					if(null!= propertyObject){
-						StreamReference streamReference = (StreamReference) propertyObject;
-						inputStream = streamReference.getInputStream();
-	                    contentType = streamReference.getContentType();
-	                    isUpdateStreamData = streamReference.isUpdateStreamData();
-	                }				
-               }
 			}
 		}
-		return inputStream;
 	}
 
 	/**

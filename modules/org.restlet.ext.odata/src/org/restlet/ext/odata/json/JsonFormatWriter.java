@@ -92,14 +92,15 @@ public class JsonFormatWriter extends JsonRepresentation {
 					field.getName());
 
 			if (prop != null && systemGeneratedAnnotation == null
-					&& isPostRequest) {
+					&& isPostRequest && !prop.getType().getName().endsWith("Stream")) {
 				if (isFirst) {
 					isFirst = false;
 				} else {
 					writer.writeSeparator();
 				}
 				this.writeProperty(writer, entity, prop, getter);
-			} else if (prop != null && !isPostRequest) {
+			} else if (prop != null && !isPostRequest
+					&& !prop.getType().getName().endsWith("Stream")) {
 				if (isFirst) {
 					isFirst = false;
 				} else {
@@ -150,8 +151,7 @@ public class JsonFormatWriter extends JsonRepresentation {
 						}
 					} else {
 						writer.writeName(prop.getName());
-						Type type = prop.getType();
-						this.writePropertyValue(writer, type, prop, value);
+						this.writePropertyValue(writer, prop.getType(), prop, value);
 					}
 				}else{
 					// property value is null so write the null value to writer
