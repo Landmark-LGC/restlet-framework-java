@@ -1,6 +1,7 @@
 package org.restlet.test.ext.odata.streamcrud;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.ConcurrentMap;
 
@@ -68,28 +69,14 @@ public class CafeCrudApplication extends Application {
 			} else if (Method.POST.equals(request.getMethod())) {
 				// read request header to get slug header and also to get merge
 				// request
-				ConcurrentMap<String, Object> attributes = request
-						.getAttributes();			
-				Series<NamedValue<String>> series = (Series<NamedValue<String>>) attributes
-						.get("org.restlet.http.headers");
-				NamedValue<String> first =series
-						.getFirst(HeaderConstants.HEADER_SLUG);
-				Representation entity = request.getEntity();
-				if (first != null) { // contains slug header
-					response.setStatus(Status.SUCCESS_CREATED);
-				} else {
-					first = series.getFirst(HeaderConstants.HEADER_X_HTTP_METHOD, true);
-					if (first != null) {// check for merge request
-						try {
-							entity.getText();
-							response.setStatus(Status.SUCCESS_OK);
-						} catch (Exception e) {
-							response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-						}
-					}
-				}
-				if (first == null) {
+				String rep = null;
+				try {
+					rep = request.getEntity().getText();
+				} catch (IOException e) {
 					response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+				}
+				if (null != rep && !rep.isEmpty()) {
+					response.setStatus(Status.SUCCESS_OK);
 				}
 			} else if (Method.DELETE.equals(request.getMethod())) {
 				response.setStatus(Status.SUCCESS_NO_CONTENT);

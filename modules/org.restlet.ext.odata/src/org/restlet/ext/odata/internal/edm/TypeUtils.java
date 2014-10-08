@@ -756,6 +756,12 @@ public class TypeUtils {
     	return edmType != null && edmType.toLowerCase().startsWith("collection");
     }
     
+    /**
+     * Gets the class name in normalized format 
+     *
+     * @param name the name
+     * @return the class name
+     */
     public static String getClassName(String name) {
     	name = ReflectUtils.normalize(name);
         return name.substring(0, 1).toUpperCase() + name.substring(1);
