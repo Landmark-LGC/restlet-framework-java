@@ -90,24 +90,29 @@ public class JsonFormatWriter extends JsonRepresentation {
 					+ field.getName().substring(1);
 			Property prop = ((Metadata) getMetadata()).getProperty(entity,
 					field.getName());
-
-			if (prop != null && systemGeneratedAnnotation == null
-					&& isPostRequest && !prop.getType().getName().endsWith("Stream")) {
-				if (isFirst) {
+			
+			
+			boolean writeProperty = false;
+            if(prop !=null){
+            	// check if this is not a stream property
+            	if(prop.getType() != null && !prop.getType().getName().contains("Stream")){
+            		// check if this is post request, if yes check for systemGeneratedProperty and skip it
+	            	if(isPostRequest && systemGeneratedAnnotation == null){
+	            		writeProperty = true;
+	            	}else{ // this is put/merge request so write the property
+	            		writeProperty = true;
+	            	}
+            	}
+            }
+            
+            if (writeProperty) {
+            	if (isFirst) {
 					isFirst = false;
 				} else {
 					writer.writeSeparator();
 				}
 				this.writeProperty(writer, entity, prop, getter);
-			} else if (prop != null && !isPostRequest
-					&& !prop.getType().getName().endsWith("Stream")) {
-				if (isFirst) {
-					isFirst = false;
-				} else {
-					writer.writeSeparator();
-				}
-				this.writeProperty(writer, entity, prop, getter);
-			}
+            }
 		}
 	}
 
