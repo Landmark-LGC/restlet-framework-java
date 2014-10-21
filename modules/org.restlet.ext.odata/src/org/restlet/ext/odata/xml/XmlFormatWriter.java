@@ -90,10 +90,13 @@ public class XmlFormatWriter extends SaxRepresentation {
             Property prop = ((Metadata) getMetadata())
                     .getProperty(entity, field.getName());
 
+			boolean isStreamProperty = (prop == null || prop.getType() == null) ? false
+					: prop.getType().getName().endsWith("Stream");
             boolean writeProperty = false;
+            
             if(prop !=null){
             	// check if this is not a stream property
-            	if(prop.getType() != null && !prop.getType().getName().contains("Stream")){
+            	if(prop.getType() != null && !isStreamProperty){
             		// check if this is post request, if yes check for systemGeneratedProperty and skip it
 	            	if(isPostRequest && systemGeneratedAnnotation == null){
 	            		writeProperty = true;

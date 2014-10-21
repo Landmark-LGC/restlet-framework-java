@@ -245,7 +245,7 @@ public class Service {
 					 * which will return the JSON representation of an entity
 					 * for POST request.
 					 */
-					final JsonFormatWriter r = new JsonFormatWriter(entity,
+					final JsonFormatWriter r = new JsonFormatWriter(
 							(Metadata) getMetadata(), entity, isPostRequest);
 					r.write(baos);
 				}
@@ -1324,7 +1324,7 @@ public class Service {
 					 * which will return the JSON representation of an entity
 					 * for PUT request.
 					 */
-					final JsonFormatWriter r = new JsonFormatWriter(entity,
+					final JsonFormatWriter r = new JsonFormatWriter(
 							(Metadata) getMetadata(), entity, isPostRequest);
 					r.write(baos);
 				}
@@ -1433,7 +1433,7 @@ public class Service {
 				 * will return the JSON representation of an entity for POST
 				 * request.
 				 */
-				final JsonFormatWriter r = new JsonFormatWriter(entity,
+				final JsonFormatWriter r = new JsonFormatWriter(
 						(Metadata) getMetadata(), entity, isPostRequest);
 				r.write(baos);
 			}
