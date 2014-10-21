@@ -711,13 +711,14 @@ public class MetadataReader extends DefaultHandler {
 					currentFunctionImport.setElementType(type);
 					currentFunctionImport.setCollection(true);
 				}else {
+					String type = TypeUtils.toJavaTypeName(returnType);
 					if(TypeUtils.isEdmSimpleType(returnType)){
 						currentFunctionImport.setSimple(true);
+						currentFunctionImport.setJavaReturnType(type);
 					}else{
 						currentFunctionImport.setComplex(true);
+						currentFunctionImport.setJavaReturnType(TypeUtils.getClassName(returnType));
 					}
-					String type = TypeUtils.toJavaTypeName(returnType);
-					currentFunctionImport.setJavaReturnType(type);
 					currentFunctionImport.setElementType(type);
 				}
 			}else {				

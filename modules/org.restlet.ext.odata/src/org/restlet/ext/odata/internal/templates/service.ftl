@@ -49,6 +49,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.restlet.ext.odata.batch.request.BatchRequest;
 import org.restlet.ext.odata.batch.request.impl.BatchRequestImpl;
+import org.restlet.ext.odata.internal.edm.Metadata;
+import org.restlet.ext.odata.json.JsonFormatWriter;
+import java.io.IOException;
+import java.io.ByteArrayOutputStream;
 
 <#list entityContainer.entities?sort as entitySet>
 import ${entityClassPkg}.${entitySet.type.className};
@@ -252,9 +256,17 @@ public class ${className} extends org.restlet.ext.odata.Service {
     	<#list functionImport.parameters as parameter>
 	    Parameter param${parameter.name} = new Parameter();
     	param${parameter.name}.setName("${parameter.name}");
-    	<#if parameter.type?starts_with("List") || parameter.type?starts_with("Collection")>
-    	Gson gson = new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().create();
-    	String jsonValue=gson.toJson(${parameter.name});    	
+    	<#if parameter.javaType?starts_with("List") || parameter.javaType?starts_with("Object")>
+    	ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		final JsonFormatWriter r = new JsonFormatWriter(
+				(Metadata) getMetadata(), value, true);
+		try {
+			r.write(baos);
+			baos.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		String jsonValue = baos.toString();    	
     	param${parameter.name}.setValue(jsonValue);
     	<#else>
     	param${parameter.name}.setValue(${parameter.name}!=null?${parameter.name}.toString():null);

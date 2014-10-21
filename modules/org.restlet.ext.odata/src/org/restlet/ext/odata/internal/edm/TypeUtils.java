@@ -711,12 +711,7 @@ public class TypeUtils {
 				Class<?> javaClass = TypeUtils.toJavaClass(edmType);
 				return javaClass.getName();
 			} else {
-				String[] split = edmType.split("\\.");
-				StringBuilder sb = new StringBuilder();
-				for (int i = 1; i < split.length; i++) {
-					sb.append(split[i]);
-				}
-				return TypeUtils.getClassName(sb.toString());
+				return TypeUtils.getClassName(edmType);
 			}
 		} catch (Exception e) {
 			return null;
@@ -757,13 +752,22 @@ public class TypeUtils {
     }
     
     /**
-     * Gets the class name in normalized format 
+     * Gets the class name in normalized format w/o package name.
+     * For e.g. edm OW5000.Point will return Point 
      *
      * @param name the name
      * @return the class name
      */
-    public static String getClassName(String name) {
-    	name = ReflectUtils.normalize(name);
+    public static String getClassName(String edmType) {
+
+		String[] split = edmType.split("\\.");
+		StringBuilder sb = new StringBuilder();
+		// start with second token skipping first package name token
+		for (int i = 1; i < split.length; i++) {
+			sb.append(split[i]);
+		}
+		
+    	String name = ReflectUtils.normalize(sb.toString());
         return name.substring(0, 1).toUpperCase() + name.substring(1);
     }
     

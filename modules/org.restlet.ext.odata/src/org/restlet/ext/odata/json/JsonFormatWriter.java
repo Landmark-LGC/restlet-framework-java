@@ -46,14 +46,13 @@ public class JsonFormatWriter extends JsonRepresentation {
 	/**
 	 * Instantiates a new json format writer.
 	 *
-	 * @param jsonArray the json array
 	 * @param metadata the metadata
 	 * @param entity the entity
 	 * @param isPostRequest the is post request
 	 */
-	public JsonFormatWriter(Object jsonArray, Metadata metadata,
+	public JsonFormatWriter(Metadata metadata,
 			Object entity, boolean isPostRequest) {
-		super(jsonArray);
+		super(entity);
 		this.metadata = metadata;
 		this.entity = entity;
 		this.isPostRequest = isPostRequest;
@@ -91,19 +90,20 @@ public class JsonFormatWriter extends JsonRepresentation {
 			Property prop = ((Metadata) getMetadata()).getProperty(entity,
 					field.getName());
 			
-			
+			boolean isStreamProperty = (prop == null || prop.getType() == null) ? false
+					: prop.getType().getName().endsWith("Stream");
 			boolean writeProperty = false;
-            if(prop !=null){
-            	// check if this is not a stream property
-            	if(prop.getType() != null && !prop.getType().getName().contains("Stream")){
-            		// check if this is post request, if yes check for systemGeneratedProperty and skip it
-	            	if(isPostRequest && systemGeneratedAnnotation == null){
-	            		writeProperty = true;
-	            	}else{ // this is put/merge request so write the property
-	            		writeProperty = true;
-	            	}
+            
+        	// check if this is not a stream property
+        	if(prop!=null && !isStreamProperty){
+        		// check if this is post request, if yes check for systemGeneratedProperty and skip it
+            	if(isPostRequest && systemGeneratedAnnotation == null){
+            		writeProperty = true;
+            	}else{ // this is put/merge request so write the property
+            		writeProperty = true;
             	}
-            }
+        	}
+           
             
             if (writeProperty) {
             	if (isFirst) {
