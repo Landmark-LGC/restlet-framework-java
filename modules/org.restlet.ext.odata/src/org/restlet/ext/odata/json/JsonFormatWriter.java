@@ -94,15 +94,16 @@ public class JsonFormatWriter extends JsonRepresentation {
 					: prop.getType().getName().endsWith("Stream");
 			boolean writeProperty = false;
             
-        	// check if this is not a stream property
-        	if(prop!=null && !isStreamProperty){
-        		// check if this is post request, if yes check for systemGeneratedProperty and skip it
-            	if(isPostRequest && systemGeneratedAnnotation == null){
-            		writeProperty = true;
-            	}else{ // this is put/merge request so write the property
-            		writeProperty = true;
-            	}
-        	}
+			// check if this is not a stream property
+			if (prop != null && !isStreamProperty) {
+				// check if this is post request, if yes check for
+				// systemGeneratedProperty and skip it
+				if (isPostRequest && systemGeneratedAnnotation == null) {
+					writeProperty = true;
+				} else { // this is put/merge request so write the property
+					writeProperty = true;
+				}
+			}
            
             
             if (writeProperty) {

@@ -94,17 +94,16 @@ public class XmlFormatWriter extends SaxRepresentation {
 					: prop.getType().getName().endsWith("Stream");
             boolean writeProperty = false;
             
-            if(prop !=null){
-            	// check if this is not a stream property
-            	if(prop.getType() != null && !isStreamProperty){
-            		// check if this is post request, if yes check for systemGeneratedProperty and skip it
-	            	if(isPostRequest && systemGeneratedAnnotation == null){
-	            		writeProperty = true;
-	            	}else{ // this is put/merge request so write the property
-	            		writeProperty = true;
-	            	}
-            	}
-            }
+			// check if this is not a stream property
+			if (prop != null && !isStreamProperty) {
+				// check if this is post request, if yes check for
+				// systemGeneratedProperty and skip it
+				if (isPostRequest && systemGeneratedAnnotation == null) {
+					writeProperty = true;
+				} else { // this is put/merge request so write the property
+					writeProperty = true;
+				}
+			}
             
 			if (writeProperty) {
 				this.writeProperty(writer, entity, prop, getter,
