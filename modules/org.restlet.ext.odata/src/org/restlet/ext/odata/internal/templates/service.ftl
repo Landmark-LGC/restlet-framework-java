@@ -32,27 +32,28 @@
  */
 package ${packageName};
 
-import java.util.ArrayList;
-import java.util.List;
-import org.restlet.data.MediaType;
-import org.restlet.data.Preference;
-import org.restlet.data.Reference;
-import org.restlet.ext.odata.Query;
-import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
-import org.restlet.resource.ResourceException;
-import org.restlet.data.ChallengeScheme;
-import org.restlet.data.ChallengeResponse;
-import org.restlet.data.Parameter;
-import org.restlet.util.Series;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import org.restlet.data.ChallengeResponse;
+import org.restlet.data.ChallengeScheme;
+import org.restlet.data.MediaType;
+import org.restlet.data.Parameter;
+import org.restlet.data.Preference;
+import org.restlet.data.Reference;
 import org.restlet.ext.odata.batch.request.BatchRequest;
 import org.restlet.ext.odata.batch.request.impl.BatchRequestImpl;
 import org.restlet.ext.odata.internal.edm.Metadata;
 import org.restlet.ext.odata.json.JsonFormatWriter;
-import java.io.IOException;
-import java.io.ByteArrayOutputStream;
+import org.restlet.ext.odata.Query;
+import org.restlet.representation.Representation;
+import org.restlet.resource.ClientResource;
+import org.restlet.resource.ResourceException;
+import org.restlet.util.Series;
 
 <#list entityContainer.entities?sort as entitySet>
 import ${entityClassPkg}.${entitySet.type.className};
