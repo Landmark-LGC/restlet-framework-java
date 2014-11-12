@@ -33,6 +33,8 @@
 
 package org.restlet.ext.odata;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -42,6 +44,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.restlet.Context;
+import org.restlet.data.CharacterSet;
 import org.restlet.data.Parameter;
 import org.restlet.data.Reference;
 import org.restlet.ext.atom.Entry;
@@ -265,6 +268,12 @@ public class Query<T> implements Iterable<T> {
     public Query<T> addParameter(String name, String value) {
         Query<T> result = new Query<T>(this.getService(), this.getSubpath(),
                 (Class<T>) this.entityClass);
+        try {
+			value = URLEncoder.encode(value,CharacterSet.UTF_8.getName());
+		} catch (Exception e) {
+			getLogger().warning(
+					"Unable to encode query string : "+ e.getMessage());
+		}
         if (getQuery() == null || "".equals(getQuery())) {
             result.setQuery(name + "=" + value);
         } else {
