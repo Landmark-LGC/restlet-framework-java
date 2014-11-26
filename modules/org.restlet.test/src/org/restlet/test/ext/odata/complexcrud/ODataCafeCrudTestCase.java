@@ -47,6 +47,7 @@ public class ODataCafeCrudTestCase extends RestletTestCase {
 	protected void tearDown() throws Exception {
 		component.stop();
 		component = null;
+		service = null;
 		super.tearDown();
 	}
 

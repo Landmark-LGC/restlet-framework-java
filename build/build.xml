@@ -78,7 +78,7 @@
 	<!-- =================== -->
 
 	<!-- Ant Contrib -->
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
 		<classpath>
 			<fileset dir="${tools}/ant-contrib" includes="**/*.jar" />
 		</classpath>

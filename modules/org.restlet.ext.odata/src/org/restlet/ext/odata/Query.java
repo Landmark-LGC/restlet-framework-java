@@ -33,7 +33,6 @@
 
 package org.restlet.ext.odata;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -270,6 +269,7 @@ public class Query<T> implements Iterable<T> {
                 (Class<T>) this.entityClass);
         try {
 			value = URLEncoder.encode(value,CharacterSet.UTF_8.getName());
+			value.replace("%2F", "/");// don't encode slash
 		} catch (Exception e) {
 			getLogger().warning(
 					"Unable to encode query string : "+ e.getMessage());
