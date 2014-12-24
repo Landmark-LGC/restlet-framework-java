@@ -98,8 +98,10 @@ public class JsonFormatWriter extends JsonRepresentation {
 			if (prop != null && !isStreamProperty) {
 				// check if this is post request, if yes check for
 				// systemGeneratedProperty and skip it
-				if (isPostRequest && systemGeneratedAnnotation == null) {
-					writeProperty = true;
+				if (isPostRequest){
+					if(systemGeneratedAnnotation == null) {
+						writeProperty = true;
+					}
 				} else { // this is put/merge request so write the property
 					writeProperty = true;
 				}
