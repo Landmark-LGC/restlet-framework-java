@@ -338,7 +338,7 @@ public class AtomFeedHandler<T> extends XmlFormatParser implements
 				// set it back to parent entity
 				ReflectUtils.invokeSetter(entity, propertyName, o);
 			}
-			if (value != null) {
+			if (value != null && !value.equals("")) {
 				ReflectUtils.invokeSetter(entity, propertyName, value);
 			}
 		} catch (XMLStreamException e) {
