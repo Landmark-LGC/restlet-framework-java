@@ -839,6 +839,8 @@ public class Reference {
                         if ((uriRef.charAt(i) == '%')
                                 && (i > uriRef.length() - 2)) {
                             sb.append("%25");
+                        } else if ((uriRef.charAt(i) == '#')) {
+                            sb.append("%23");
                         } else {
                             sb.append(uriRef.charAt(i));
                         }
