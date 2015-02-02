@@ -412,7 +412,8 @@ public class Metadata extends SaxRepresentation {
                 if (type.getClassName().equals(entityClass)) {
                     String value = getKeyValue(type, entity);
                     if (value != null) {
-                        result = "/" + entitySet.getName() + "(" + value + ")";
+                    	
+                        result = "/" + entitySet.getName() + "(" + ConversionUtil.encodeString(value) + ")";
                     }
                 }
             }
