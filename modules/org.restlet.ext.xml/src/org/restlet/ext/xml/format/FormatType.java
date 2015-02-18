@@ -70,7 +70,7 @@ public enum FormatType {
 				|| MediaType.APPLICATION_JSONLITE_FULLMETADATA.getName()
 				.equalsIgnoreCase(format))
 			return JSONLITEFULLMETADATA;
-		throw new UnsupportedOperationException("Unsupported format " + format);
+		else return ATOM;
 	}
 	
 	/**

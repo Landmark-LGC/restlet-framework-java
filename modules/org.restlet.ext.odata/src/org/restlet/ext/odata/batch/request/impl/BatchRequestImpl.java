@@ -79,11 +79,10 @@ public class BatchRequestImpl implements BatchRequest {
 		String batchId = generateBatchId();
 		
 		ClientResource clientResource = service.createResource(new Reference(
-				service.getServiceRef()));
-		Reference resourceRef = clientResource.getRequest().getResourceRef();		
+				service.getServiceRef()));	
 		
 		// create the client Info
-		setClientContext(clientResource, resourceRef);
+		setClientContext(clientResource);
 		
 		StringBuilder sb = createBatchString(batchId, this.requests);
 		//Finally posting the batch request.
@@ -130,8 +129,7 @@ public class BatchRequestImpl implements BatchRequest {
 	 * @param clientResource
 	 * @param resourceRef
 	 */
-	private void setClientContext(ClientResource clientResource,
-			Reference resourceRef) {
+	private void setClientContext(ClientResource clientResource) {
 		ClientInfo clientInfo = new ClientInfo();
 		clientResource.getRequest().setClientInfo(clientInfo);
 
@@ -140,10 +138,13 @@ public class BatchRequestImpl implements BatchRequest {
 		client.getContext().getParameters()
 				.add("useForwardedForHeader", "false");
 
-		
+		Reference resourceRef = clientResource.getRequest().getResourceRef();
+		String ref = resourceRef.getTargetRef().toString();
+        if (!ref.endsWith("/")) {
+        	ref = ref + "/";
+        }
 		clientResource.getRequest().setResourceRef(
-				new Reference(resourceRef.getTargetRef()
-						+ BatchConstants.BATCH_ENDPOINT_URI));
+				new Reference(ref + BatchConstants.BATCH_ENDPOINT_URI));
 		clientResource.getRequest().setMethod(Method.POST);
 		clientResource.setNext(client);
 	}
