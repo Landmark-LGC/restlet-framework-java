@@ -56,7 +56,7 @@ public class Group {
     private String comments;
     private double grade;
     private Date gradeDate;
-    private int id;
+    private Integer id;
     private boolean isPendingFormation;
     private boolean passed;
     private Tracking tracking;
@@ -81,7 +81,7 @@ public class Group {
      * @param id
      *            The identifiant value of the entity.
      */
-    public Group(int id) {
+    public Group(Integer id) {
         this();
         this.id = id;
     }
@@ -115,7 +115,7 @@ public class Group {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -229,7 +229,7 @@ public class Group {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

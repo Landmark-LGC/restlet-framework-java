@@ -50,7 +50,7 @@ import org.restlet.test.ext.odata.deepexpand.model.Registration;
 */
 public class Category {
 
-    private int id;
+    private Integer id;
     private String path;
     private Tracking tracking;
     private List<Category> childCategories = new ArrayList<Category>();
@@ -73,7 +73,7 @@ public class Category {
      * @param id
      *            The identifiant value of the entity.
      */
-    public Category(int id) {
+    public Category(Integer id) {
         this();
         this.id = id;
     }
@@ -83,7 +83,7 @@ public class Category {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -153,7 +153,7 @@ public class Category {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

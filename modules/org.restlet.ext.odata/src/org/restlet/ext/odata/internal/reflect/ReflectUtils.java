@@ -178,15 +178,16 @@ public class ReflectUtils {
                 }
 
                 Method getter = null;
-                Method method;
-                for (int i = 0; (getter == null)
+                //Method method;
+                getter = entity.getClass().getDeclaredMethod(getterName, new Class[0]);
+                /*for (int i = 0; (getter == null)
                         && (i < entity.getClass().getDeclaredMethods().length); i++) {
                     method = entity.getClass().getDeclaredMethods()[i];
 
                     if (method.getName().equals(getterName)) {
                         getter = method;
                     }
-                }
+                }*/
 
                 if (getter != null) {
                     result = getter.invoke(o);
@@ -244,8 +245,9 @@ public class ReflectUtils {
             }
 
             Method setter = null;
-            Method method;
-            for (int i = 0; (setter == null)
+            //Method method;
+            setter = o.getClass().getDeclaredMethod(setterName, propertyValue.getClass());
+            /*for (int i = 0; (setter == null)
                     && (i < o.getClass().getDeclaredMethods().length); i++) {
                 method = o.getClass().getDeclaredMethods()[i];
 
@@ -256,7 +258,7 @@ public class ReflectUtils {
                         break;
                     }
                 }
-            }
+            }*/
 
             if (setter != null) {
                 setter.invoke(o, propertyValue);

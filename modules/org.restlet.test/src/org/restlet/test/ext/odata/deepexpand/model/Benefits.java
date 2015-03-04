@@ -43,10 +43,10 @@ package org.restlet.test.ext.odata.deepexpand.model;
 */
 public class Benefits {
 
-    private boolean accommodationOffered;
-    private boolean insuranceOffered;
-    private boolean salaryOffered;
-    private boolean transportationOffered;
+    private Boolean accommodationOffered;
+    private Boolean insuranceOffered;
+    private Boolean salaryOffered;
+    private Boolean transportationOffered;
 
     /**
      * Constructor without parameter.
@@ -61,7 +61,7 @@ public class Benefits {
     *
     * @return The value of the "accommodationOffered" attribute.
     */
-   public boolean getAccommodationOffered() {
+   public Boolean getAccommodationOffered() {
       return accommodationOffered;
    }
 
@@ -70,7 +70,7 @@ public class Benefits {
     *
     * @return The value of the "insuranceOffered" attribute.
     */
-   public boolean getInsuranceOffered() {
+   public Boolean getInsuranceOffered() {
       return insuranceOffered;
    }
 
@@ -79,7 +79,7 @@ public class Benefits {
     *
     * @return The value of the "salaryOffered" attribute.
     */
-   public boolean getSalaryOffered() {
+   public Boolean getSalaryOffered() {
       return salaryOffered;
    }
 
@@ -88,7 +88,7 @@ public class Benefits {
     *
     * @return The value of the "transportationOffered" attribute.
     */
-   public boolean getTransportationOffered() {
+   public Boolean getTransportationOffered() {
       return transportationOffered;
    }
 
@@ -98,7 +98,7 @@ public class Benefits {
     * @param accommodationOffered
     *     The value of the "accommodationOffered" attribute.
     */
-   public void setAccommodationOffered(boolean accommodationOffered) {
+   public void setAccommodationOffered(Boolean accommodationOffered) {
       this.accommodationOffered = accommodationOffered;
    }
 
@@ -108,7 +108,7 @@ public class Benefits {
     * @param insuranceOffered
     *     The value of the "insuranceOffered" attribute.
     */
-   public void setInsuranceOffered(boolean insuranceOffered) {
+   public void setInsuranceOffered(Boolean insuranceOffered) {
       this.insuranceOffered = insuranceOffered;
    }
 
@@ -118,7 +118,7 @@ public class Benefits {
     * @param salaryOffered
     *     The value of the "salaryOffered" attribute.
     */
-   public void setSalaryOffered(boolean salaryOffered) {
+   public void setSalaryOffered(Boolean salaryOffered) {
       this.salaryOffered = salaryOffered;
    }
 
@@ -128,7 +128,7 @@ public class Benefits {
     * @param transportationOffered
     *     The value of the "transportationOffered" attribute.
     */
-   public void setTransportationOffered(boolean transportationOffered) {
+   public void setTransportationOffered(Boolean transportationOffered) {
       this.transportationOffered = transportationOffered;
    }
 

@@ -55,7 +55,7 @@ import org.restlet.test.ext.odata.deepexpand.model.Multilingual;
 public class Company {
 
     private String email;
-    private int id;
+    private Integer id;
     private boolean offersCompensation;
     private String taxCode;
     private String taxDivision;
@@ -87,7 +87,7 @@ public class Company {
      * @param id
      *            The identifiant value of the entity.
      */
-    public Company(int id) {
+    public Company(Integer id) {
         this();
         this.id = id;
     }
@@ -105,7 +105,7 @@ public class Company {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -262,7 +262,7 @@ public class Company {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

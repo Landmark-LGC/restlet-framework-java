@@ -51,7 +51,7 @@ import org.restlet.test.ext.odata.deepexpand.model.Student;
 */
 public class Location {
 
-    private int id;
+    private Integer id;
     private String name;
     private String path;
     private String type;
@@ -77,7 +77,7 @@ public class Location {
      * @param id
      *            The identifiant value of the entity.
      */
-    public Location(int id) {
+    public Location(Integer id) {
         this();
         this.id = id;
     }
@@ -87,7 +87,7 @@ public class Location {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -182,7 +182,7 @@ public class Location {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

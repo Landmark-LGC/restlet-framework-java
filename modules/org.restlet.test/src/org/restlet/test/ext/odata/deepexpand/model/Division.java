@@ -49,7 +49,7 @@ import org.restlet.test.ext.odata.deepexpand.model.Multilingual;
 */
 public class Division {
 
-    private int id;
+    private Integer id;
     private Tracking tracking;
     private Department department;
     private List<FacultyUser> facultyUsers = new ArrayList<FacultyUser>();
@@ -69,7 +69,7 @@ public class Division {
      * @param id
      *            The identifiant value of the entity.
      */
-    public Division(int id) {
+    public Division(Integer id) {
         this();
         this.id = id;
     }
@@ -79,7 +79,7 @@ public class Division {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -123,7 +123,7 @@ public class Division {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

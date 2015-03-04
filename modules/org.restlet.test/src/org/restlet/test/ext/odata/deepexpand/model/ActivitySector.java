@@ -50,7 +50,7 @@ public class ActivitySector {
 
     private String code;
     private String description;
-    private int id;
+    private Integer id;
     private List<ActivitySector> childActivitySectors = new ArrayList<ActivitySector>();
     private List<Company> companies = new ArrayList<Company>();
     private ActivitySector parentActivitySector;
@@ -69,7 +69,7 @@ public class ActivitySector {
      * @param id
      *            The identifiant value of the entity.
      */
-    public ActivitySector(int id) {
+    public ActivitySector(Integer id) {
         this();
         this.id = id;
     }
@@ -95,7 +95,7 @@ public class ActivitySector {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -149,7 +149,7 @@ public class ActivitySector {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

@@ -57,8 +57,8 @@ public class JobPart {
 
     private String comments;
     private Date endDate;
-    private int id;
-    private int paidDays;
+    private Integer id;
+    private Integer paidDays;
     private String siteType;
     private Date startDate;
     private GeoLocation expeditionGeoLocation;
@@ -86,7 +86,7 @@ public class JobPart {
      * @param id
      *            The identifiant value of the entity.
      */
-    public JobPart(int id) {
+    public JobPart(Integer id) {
         this();
         this.id = id;
     }
@@ -112,7 +112,7 @@ public class JobPart {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -120,7 +120,7 @@ public class JobPart {
     *
     * @return The value of the "paidDays" attribute.
     */
-   public int getPaidDays() {
+   public Integer getPaidDays() {
       return paidDays;
    }
    /**
@@ -251,7 +251,7 @@ public class JobPart {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**
@@ -260,7 +260,7 @@ public class JobPart {
     * @param paidDays
     *     The value of the "paidDays" attribute.
     */
-   public void setPaidDays(int paidDays) {
+   public void setPaidDays(Integer paidDays) {
       this.paidDays = paidDays;
    }
    /**

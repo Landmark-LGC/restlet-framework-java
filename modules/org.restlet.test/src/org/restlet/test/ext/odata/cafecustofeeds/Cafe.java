@@ -54,7 +54,7 @@ private String city;
 private String companyName;
 private String id;
 private String name;
-private int zipCode;
+private Integer zipCode;
 private Contact contact;
 private List<Item> items = new ArrayList<Item>();    /**
      * Constructor without parameter.
@@ -116,7 +116,7 @@ private List<Item> items = new ArrayList<Item>();    /**
     *
     * @return The value of the zipCode attribute.
     */
-   public int getZipCode() {
+   public Integer getZipCode() {
       return zipCode;
    }
    
@@ -185,7 +185,7 @@ private List<Item> items = new ArrayList<Item>();    /**
     * @param ZipCode
     *     The value of the zipCode attribute.
     */
-   public void setZipCode(int zipCode) {
+   public void setZipCode(Integer zipCode) {
       this.zipCode = zipCode;
    }
    

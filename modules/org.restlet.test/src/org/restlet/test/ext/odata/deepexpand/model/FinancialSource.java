@@ -52,7 +52,7 @@ public class FinancialSource {
 
     private String code;
     private String description;
-    private int id;
+    private Integer id;
     private String name;
     private Tracking tracking;
     private List<CoOp> coOps = new ArrayList<CoOp>();
@@ -74,7 +74,7 @@ public class FinancialSource {
      * @param id
      *            The identifiant value of the entity.
      */
-    public FinancialSource(int id) {
+    public FinancialSource(Integer id) {
         this();
         this.id = id;
     }
@@ -100,7 +100,7 @@ public class FinancialSource {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -179,7 +179,7 @@ public class FinancialSource {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

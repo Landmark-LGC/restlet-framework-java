@@ -60,8 +60,8 @@ public class Registration {
 
     private double grade;
     private Date gradeDate;
-    private int hostSatisfactionRate;
-    private int id;
+    private Integer hostSatisfactionRate;
+    private Integer id;
     private boolean passed;
     private Date preferredEnd;
     private Date preferredStart;
@@ -69,8 +69,8 @@ public class Registration {
     private boolean qualifiedForAssigmnent;
     private boolean qualifiedForCompletion;
     private Date registrationDate;
-    private int subjectSatisfactionRate;
-    private int supervisionSatisfactionRate;
+    private Integer subjectSatisfactionRate;
+    private Integer supervisionSatisfactionRate;
     private Tracking tracking;
     private CoOp coop;
     private Group group;
@@ -99,7 +99,7 @@ public class Registration {
      * @param id
      *            The identifiant value of the entity.
      */
-    public Registration(int id) {
+    public Registration(Integer id) {
         this();
         this.id = id;
     }
@@ -125,7 +125,7 @@ public class Registration {
     *
     * @return The value of the "hostSatisfactionRate" attribute.
     */
-   public int getHostSatisfactionRate() {
+   public Integer getHostSatisfactionRate() {
       return hostSatisfactionRate;
    }
    /**
@@ -133,7 +133,7 @@ public class Registration {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -197,7 +197,7 @@ public class Registration {
     *
     * @return The value of the "subjectSatisfactionRate" attribute.
     */
-   public int getSubjectSatisfactionRate() {
+   public Integer getSubjectSatisfactionRate() {
       return subjectSatisfactionRate;
    }
    /**
@@ -205,7 +205,7 @@ public class Registration {
     *
     * @return The value of the "supervisionSatisfactionRate" attribute.
     */
-   public int getSupervisionSatisfactionRate() {
+   public Integer getSupervisionSatisfactionRate() {
       return supervisionSatisfactionRate;
    }
    /**
@@ -348,7 +348,7 @@ public class Registration {
     * @param hostSatisfactionRate
     *     The value of the "hostSatisfactionRate" attribute.
     */
-   public void setHostSatisfactionRate(int hostSatisfactionRate) {
+   public void setHostSatisfactionRate(Integer hostSatisfactionRate) {
       this.hostSatisfactionRate = hostSatisfactionRate;
    }
    /**
@@ -357,7 +357,7 @@ public class Registration {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**
@@ -429,7 +429,7 @@ public class Registration {
     * @param subjectSatisfactionRate
     *     The value of the "subjectSatisfactionRate" attribute.
     */
-   public void setSubjectSatisfactionRate(int subjectSatisfactionRate) {
+   public void setSubjectSatisfactionRate(Integer subjectSatisfactionRate) {
       this.subjectSatisfactionRate = subjectSatisfactionRate;
    }
    /**
@@ -438,7 +438,7 @@ public class Registration {
     * @param supervisionSatisfactionRate
     *     The value of the "supervisionSatisfactionRate" attribute.
     */
-   public void setSupervisionSatisfactionRate(int supervisionSatisfactionRate) {
+   public void setSupervisionSatisfactionRate(Integer supervisionSatisfactionRate) {
       this.supervisionSatisfactionRate = supervisionSatisfactionRate;
    }
    /**

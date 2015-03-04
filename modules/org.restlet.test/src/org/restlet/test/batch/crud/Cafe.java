@@ -20,7 +20,7 @@ public class Cafe {
 	private String name;
 
 	/** The zip code. */
-	private int zipCode;
+	private Integer zipCode;
 
 	/**
 	 * Constructor without parameter.
@@ -73,7 +73,7 @@ public class Cafe {
 	 * 
 	 * @return The value of the zipCode attribute.
 	 */
-	public int getZipCode() {
+	public Integer getZipCode() {
 		return zipCode;
 	}
 
@@ -113,7 +113,7 @@ public class Cafe {
 	 * @param zipCode
 	 *            the new zip code
 	 */
-	public void setZipCode(int zipCode) {
+	public void setZipCode(Integer zipCode) {
 		this.zipCode = zipCode;
 	}
 }

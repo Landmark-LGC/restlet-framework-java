@@ -48,7 +48,7 @@ import org.restlet.test.ext.odata.deepexpand.model.Multilingual;
 */
 public class University {
 
-    private int id;
+    private Integer id;
     private EmbeddableAddress address;
     private Tracking tracking;
     private List<Department> departments = new ArrayList<Department>();
@@ -68,7 +68,7 @@ public class University {
      * @param id
      *            The identifiant value of the entity.
      */
-    public University(int id) {
+    public University(Integer id) {
         this();
         this.id = id;
     }
@@ -78,7 +78,7 @@ public class University {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -121,7 +121,7 @@ public class University {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

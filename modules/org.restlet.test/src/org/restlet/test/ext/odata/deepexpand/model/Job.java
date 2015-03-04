@@ -53,7 +53,7 @@ public class Job {
 
     private String comments;
     private Date endDate;
-    private int id;
+    private Integer id;
     private Date startDate;
     private String state;
     private Tracking tracking;
@@ -76,7 +76,7 @@ public class Job {
      * @param id
      *            The identifiant value of the entity.
      */
-    public Job(int id) {
+    public Job(Integer id) {
         this();
         this.id = id;
     }
@@ -102,7 +102,7 @@ public class Job {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -189,7 +189,7 @@ public class Job {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**
