@@ -57,7 +57,7 @@ public class Report {
     private String comments;
     private Date dateSubmitted;
     private double grade;
-    private int id;
+    private Integer id;
     private String title;
     private Tracking tracking;
     private List<Attachment> attachments = new ArrayList<Attachment>();
@@ -82,7 +82,7 @@ public class Report {
      * @param id
      *            The identifiant value of the entity.
      */
-    public Report(int id) {
+    public Report(Integer id) {
         this();
         this.id = id;
     }
@@ -116,7 +116,7 @@ public class Report {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -231,7 +231,7 @@ public class Report {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

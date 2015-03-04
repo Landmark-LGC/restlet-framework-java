@@ -52,7 +52,7 @@ public class ReportType {
     private boolean _final;
     private String codeName;
     private String factoryClassName;
-    private int id;
+    private Integer id;
     private boolean isAggregate;
     private String scope;
     private Tracking tracking;
@@ -75,7 +75,7 @@ public class ReportType {
      * @param id
      *            The identifiant value of the entity.
      */
-    public ReportType(int id) {
+    public ReportType(Integer id) {
         this();
         this.id = id;
     }
@@ -109,7 +109,7 @@ public class ReportType {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -205,7 +205,7 @@ public class ReportType {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

@@ -51,7 +51,7 @@ public class Payment {
     private double amount;
     private String comment;
     private Date endDate;
-    private int id;
+    private Integer id;
     private Date paymentDate;
     private Date startDate;
     private String state;
@@ -75,7 +75,7 @@ public class Payment {
      * @param id
      *            The identifiant value of the entity.
      */
-    public Payment(int id) {
+    public Payment(Integer id) {
         this();
         this.id = id;
     }
@@ -109,7 +109,7 @@ public class Payment {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -212,7 +212,7 @@ public class Payment {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

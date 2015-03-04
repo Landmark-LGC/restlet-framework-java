@@ -46,7 +46,7 @@ public class Email {
 
     private String address;
     private String comment;
-    private int id;
+    private Integer id;
 
     /**
      * Constructor without parameter.
@@ -62,7 +62,7 @@ public class Email {
      * @param id
      *            The identifiant value of the entity.
      */
-    public Email(int id) {
+    public Email(Integer id) {
         this();
         this.id = id;
     }
@@ -88,7 +88,7 @@ public class Email {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -115,7 +115,7 @@ public class Email {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
 }

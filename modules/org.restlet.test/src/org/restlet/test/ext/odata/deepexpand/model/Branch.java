@@ -52,7 +52,7 @@ import org.restlet.test.ext.odata.deepexpand.model.Multilingual;
 public class Branch {
 
     private String fax;
-    private int id;
+    private Integer id;
     private String telephone;
     private EmbeddableAddress address;
     private Tracking tracking;
@@ -76,7 +76,7 @@ public class Branch {
      * @param id
      *            The identifiant value of the entity.
      */
-    public Branch(int id) {
+    public Branch(Integer id) {
         this();
         this.id = id;
     }
@@ -94,7 +94,7 @@ public class Branch {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -181,7 +181,7 @@ public class Branch {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

@@ -83,7 +83,7 @@ public class ODataCafeCrudTestCase extends RestletTestCase {
 		Cafe cafe1 = query.iterator().next();
 		assertEquals("TestName", cafe1.getName());
 		assertEquals("30", cafe1.getId());
-		assertEquals(111111, cafe1.getZipCode());
+		assertEquals(new Integer(111111), cafe1.getZipCode());
 		assertNotNull(cafe1.getSpatial());
 		Response latestResponse = query.getService().getLatestResponse();
 		assertEquals(Status.SUCCESS_OK, latestResponse.getStatus());

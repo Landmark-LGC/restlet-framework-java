@@ -51,7 +51,7 @@ import org.restlet.test.ext.odata.deepexpand.model.University;
 */
 public class Department {
 
-    private int id;
+    private Integer id;
     private Tracking tracking;
     private List<AuthenticatedUser> authenticatedUsers;
     private List<Division> divisions = new ArrayList<Division>();
@@ -73,7 +73,7 @@ public class Department {
      * @param id
      *            The identifiant value of the entity.
      */
-    public Department(int id) {
+    public Department(Integer id) {
         this();
         this.id = id;
     }
@@ -83,7 +83,7 @@ public class Department {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -145,7 +145,7 @@ public class Department {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

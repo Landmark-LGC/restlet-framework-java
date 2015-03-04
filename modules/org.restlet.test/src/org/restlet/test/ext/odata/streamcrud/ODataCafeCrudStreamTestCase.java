@@ -80,7 +80,7 @@ public class ODataCafeCrudStreamTestCase extends RestletTestCase {
 		assertEquals(Status.SUCCESS_OK, latestResponse.getStatus());
 		assertEquals("TestName", cafe1.getName());
         assertEquals("30", cafe1.getId());
-        assertEquals(111111, cafe1.getZipCode());
+        assertEquals(new Integer(111111), cafe1.getZipCode());
         attachment = cafe1.getAttachment();  
         assertEquals(contentType, attachment.getContentType());
         try {
@@ -120,7 +120,7 @@ public class ODataCafeCrudStreamTestCase extends RestletTestCase {
 		assertEquals(Status.SUCCESS_OK, latestResponse.getStatus());
 		assertEquals("TestName-update", cafe2.getName());
 		assertEquals("30", cafe2.getId());
-		assertEquals(111111, cafe2.getZipCode());
+		assertEquals(new Integer(111111), cafe2.getZipCode());
 		attachment = cafe2.getAttachment();
 		assertEquals(contentType, attachment.getContentType());
 		try {

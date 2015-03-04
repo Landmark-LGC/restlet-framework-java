@@ -48,7 +48,7 @@ import org.restlet.test.ext.odata.deepexpand.model.Person;
 public class Language {
 
     private boolean _default;
-    private int id;
+    private Integer id;
     private String localeCode;
     private String name;
     private List<Person> preferredByPersons = new ArrayList<Person>();
@@ -67,7 +67,7 @@ public class Language {
      * @param id
      *            The identifiant value of the entity.
      */
-    public Language(int id) {
+    public Language(Integer id) {
         this();
         this.id = id;
     }
@@ -85,7 +85,7 @@ public class Language {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -128,7 +128,7 @@ public class Language {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

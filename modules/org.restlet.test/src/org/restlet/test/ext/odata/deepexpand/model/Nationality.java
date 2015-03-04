@@ -49,7 +49,7 @@ import org.restlet.test.ext.odata.deepexpand.model.Student;
 public class Nationality {
 
     private String code;
-    private int id;
+    private Integer id;
     private Multilingual name;
     private List<Student> students = new ArrayList<Student>();
 
@@ -67,7 +67,7 @@ public class Nationality {
      * @param id
      *            The identifiant value of the entity.
      */
-    public Nationality(int id) {
+    public Nationality(Integer id) {
         this();
         this.id = id;
     }
@@ -85,7 +85,7 @@ public class Nationality {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -121,7 +121,7 @@ public class Nationality {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

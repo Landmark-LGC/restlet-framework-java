@@ -46,7 +46,7 @@ public class EntityAccess {
 
     private boolean accessingAllDepartments;
     private String entityName;
-    private int id;
+    private Integer id;
     private boolean ownReadable;
     private boolean ownWritable;
     private boolean readable;
@@ -67,7 +67,7 @@ public class EntityAccess {
      * @param id
      *            The identifiant value of the entity.
      */
-    public EntityAccess(int id) {
+    public EntityAccess(Integer id) {
         this();
         this.id = id;
     }
@@ -93,7 +93,7 @@ public class EntityAccess {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -161,7 +161,7 @@ public class EntityAccess {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

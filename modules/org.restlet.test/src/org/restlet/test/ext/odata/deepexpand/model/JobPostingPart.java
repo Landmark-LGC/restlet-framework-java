@@ -52,11 +52,11 @@ import org.restlet.test.ext.odata.deepexpand.model.Multilingual;
 */
 public class JobPostingPart {
 
-    private int durationDays;
-    private int id;
-    private int paidDays;
+    private Integer durationDays;
+    private Integer id;
+    private Integer paidDays;
     private String siteType;
-    private int startDay;
+    private Integer startDay;
     private GeoLocation expeditionGeoLocation;
     private Tracking tracking;
     private Branch branch;
@@ -80,7 +80,7 @@ public class JobPostingPart {
      * @param id
      *            The identifiant value of the entity.
      */
-    public JobPostingPart(int id) {
+    public JobPostingPart(Integer id) {
         this();
         this.id = id;
     }
@@ -90,7 +90,7 @@ public class JobPostingPart {
     *
     * @return The value of the "durationDays" attribute.
     */
-   public int getDurationDays() {
+   public Integer getDurationDays() {
       return durationDays;
    }
    /**
@@ -98,7 +98,7 @@ public class JobPostingPart {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -106,7 +106,7 @@ public class JobPostingPart {
     *
     * @return The value of the "paidDays" attribute.
     */
-   public int getPaidDays() {
+   public Integer getPaidDays() {
       return paidDays;
    }
    /**
@@ -122,7 +122,7 @@ public class JobPostingPart {
     *
     * @return The value of the "startDay" attribute.
     */
-   public int getStartDay() {
+   public Integer getStartDay() {
       return startDay;
    }
    /**
@@ -201,7 +201,7 @@ public class JobPostingPart {
     * @param durationDays
     *     The value of the "durationDays" attribute.
     */
-   public void setDurationDays(int durationDays) {
+   public void setDurationDays(Integer durationDays) {
       this.durationDays = durationDays;
    }
    /**
@@ -210,7 +210,7 @@ public class JobPostingPart {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**
@@ -219,7 +219,7 @@ public class JobPostingPart {
     * @param paidDays
     *     The value of the "paidDays" attribute.
     */
-   public void setPaidDays(int paidDays) {
+   public void setPaidDays(Integer paidDays) {
       this.paidDays = paidDays;
    }
    /**
@@ -237,7 +237,7 @@ public class JobPostingPart {
     * @param startDay
     *     The value of the "startDay" attribute.
     */
-   public void setStartDay(int startDay) {
+   public void setStartDay(Integer startDay) {
       this.startDay = startDay;
    }
    /**

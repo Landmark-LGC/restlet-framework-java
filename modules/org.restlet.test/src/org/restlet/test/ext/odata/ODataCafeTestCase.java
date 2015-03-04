@@ -94,7 +94,7 @@ public class ODataCafeTestCase extends RestletTestCase {
         assertEquals("Le Cafe Louis", cafe.getName());
         assertEquals("Cafe corp.", cafe.getCompanyName());
         assertEquals("Levallois-Perret", cafe.getCity());
-        assertEquals(92300, cafe.getZipCode());
+        assertEquals(new Integer(92300), cafe.getZipCode());
         
         //test complex type and collection type (Including collection of simple type as well as complex type).
         assertNotNull(cafe.getSpatial());
@@ -106,7 +106,7 @@ public class ODataCafeTestCase extends RestletTestCase {
         assertEquals("Le Petit Marly", cafe.getName());
         assertEquals("Cafe inc.", cafe.getCompanyName());
         assertEquals("Marly Le Roi", cafe.getCity());
-        assertEquals(78310, cafe.getZipCode());
+        assertEquals(new Integer(78310), cafe.getZipCode());
     }
 
     /**
@@ -173,7 +173,7 @@ public class ODataCafeTestCase extends RestletTestCase {
         assertEquals("Le Cafe Louis", cafe.getName());
         assertEquals("Cafe corp.", cafe.getCompanyName());
         assertEquals("Levallois-Perret", cafe.getCity());
-        assertEquals(92300, cafe.getZipCode());
+        assertEquals(new Integer(92300), cafe.getZipCode());
 
         Contact contact = cafe.getContact();
         assertNotNull(contact);
@@ -187,7 +187,7 @@ public class ODataCafeTestCase extends RestletTestCase {
         assertEquals("Le Petit Marly", cafe.getName());
         assertEquals("Cafe inc.", cafe.getCompanyName());
         assertEquals("Marly Le Roi", cafe.getCity());
-        assertEquals(78310, cafe.getZipCode());
+        assertEquals(new Integer(78310), cafe.getZipCode());
 
         contact = cafe.getContact();
         assertNotNull(contact);
@@ -211,7 +211,7 @@ public class ODataCafeTestCase extends RestletTestCase {
         assertEquals("Le Cafe Louis", cafe.getName());
         assertEquals("Cafe corp.", cafe.getCompanyName());
         assertEquals("Levallois-Perret", cafe.getCity());
-        assertEquals(92300, cafe.getZipCode());
+        assertEquals(new Integer(92300), cafe.getZipCode());
 
         Iterator<Item> iterator2 = cafe.getItems().iterator();
         assertTrue(iterator2.hasNext());
@@ -230,7 +230,7 @@ public class ODataCafeTestCase extends RestletTestCase {
         assertEquals("Le Petit Marly", cafe.getName());
         assertEquals("Cafe inc.", cafe.getCompanyName());
         assertEquals("Marly Le Roi", cafe.getCity());
-        assertEquals(78310, cafe.getZipCode());
+        assertEquals(new Integer(78310), cafe.getZipCode());
 
         iterator2 = cafe.getItems().iterator();
         assertTrue(iterator2.hasNext());
@@ -273,7 +273,7 @@ public class ODataCafeTestCase extends RestletTestCase {
         assertEquals("Le Cafe Louis", cafe.getName());
         assertEquals("Cafe corp.", cafe.getCompanyName());
         assertEquals("Levallois-Perret", cafe.getCity());
-        assertEquals(92300, cafe.getZipCode());
+        assertEquals(new Integer(92300), cafe.getZipCode());
 
         assertTrue(iterator.hasNext());
         cafe = iterator.next();
@@ -281,7 +281,7 @@ public class ODataCafeTestCase extends RestletTestCase {
         assertEquals("Le Petit Marly", cafe.getName());
         assertEquals("Cafe inc.", cafe.getCompanyName());
         assertEquals("Marly Le Roi", cafe.getCity());
-        assertEquals(78310, cafe.getZipCode());
+        assertEquals(new Integer(78310), cafe.getZipCode());
 
         assertTrue(iterator.hasNext());
         cafe = iterator.next();
@@ -289,7 +289,7 @@ public class ODataCafeTestCase extends RestletTestCase {
         assertEquals("Le Cafe Louis", cafe.getName());
         assertEquals("Cafe corp.", cafe.getCompanyName());
         assertEquals("Levallois-Perret", cafe.getCity());
-        assertEquals(92300, cafe.getZipCode());
+        assertEquals(new Integer(92300), cafe.getZipCode());
 
         assertTrue(iterator.hasNext());
         cafe = iterator.next();
@@ -297,6 +297,6 @@ public class ODataCafeTestCase extends RestletTestCase {
         assertEquals("Le Petit Marly", cafe.getName());
         assertEquals("Cafe inc.", cafe.getCompanyName());
         assertEquals("Marly Le Roi", cafe.getCity());
-        assertEquals(78310, cafe.getZipCode());
+        assertEquals(new Integer(78310), cafe.getZipCode());
     }
 }

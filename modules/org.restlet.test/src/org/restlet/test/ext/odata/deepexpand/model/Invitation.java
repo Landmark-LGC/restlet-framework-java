@@ -51,7 +51,7 @@ import org.restlet.test.ext.odata.deepexpand.model.Registration;
 public class Invitation {
 
     private Date date;
-    private int id;
+    private Integer id;
     private Tracking tracking;
     private Group group;
     private List<Registration> recepients = new ArrayList<Registration>();
@@ -72,7 +72,7 @@ public class Invitation {
      * @param id
      *            The identifiant value of the entity.
      */
-    public Invitation(int id) {
+    public Invitation(Integer id) {
         this();
         this.id = id;
     }
@@ -90,7 +90,7 @@ public class Invitation {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -152,7 +152,7 @@ public class Invitation {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

@@ -47,7 +47,7 @@ public class Address {
 
     private String city;
     private String country;
-    private int id;
+    private Integer id;
     private String number;
     private String poBox;
     private String street;
@@ -71,7 +71,7 @@ public class Address {
      * @param id
      *            The identifiant value of the entity.
      */
-    public Address(int id) {
+    public Address(Integer id) {
         this();
         this.id = id;
     }
@@ -97,7 +97,7 @@ public class Address {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -190,7 +190,7 @@ public class Address {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

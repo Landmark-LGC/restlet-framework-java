@@ -58,7 +58,7 @@ public class AuthenticatedUser {
     private String email;
     private String fatherName;
     private String gender;
-    private int id;
+    private Integer id;
     private String motherName;
     private String name;
     private String notes;
@@ -87,7 +87,7 @@ public class AuthenticatedUser {
      * @param id
      *            The identifiant value of the entity.
      */
-    public AuthenticatedUser(int id) {
+    public AuthenticatedUser(Integer id) {
         this();
         this.id = id;
     }
@@ -129,7 +129,7 @@ public class AuthenticatedUser {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -285,7 +285,7 @@ public class AuthenticatedUser {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

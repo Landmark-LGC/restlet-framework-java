@@ -45,7 +45,7 @@ import org.restlet.test.ext.odata.deepexpand.model.Person;
 public class Telephone {
 
     private String comment;
-    private int id;
+    private Integer id;
     private String number;
     private String type;
     private Tracking tracking;
@@ -65,7 +65,7 @@ public class Telephone {
      * @param id
      *            The identifiant value of the entity.
      */
-    public Telephone(int id) {
+    public Telephone(Integer id) {
         this();
         this.id = id;
     }
@@ -83,7 +83,7 @@ public class Telephone {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -134,7 +134,7 @@ public class Telephone {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

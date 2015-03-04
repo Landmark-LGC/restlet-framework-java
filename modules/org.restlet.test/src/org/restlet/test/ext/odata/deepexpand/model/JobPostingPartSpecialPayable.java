@@ -45,8 +45,8 @@ import org.restlet.test.ext.odata.deepexpand.model.JobPostingPart;
 */
 public class JobPostingPartSpecialPayable {
 
-    private int id;
-    private int paidDays;
+    private Integer id;
+    private Integer paidDays;
     private FinancialSource financialSource;
     private JobPostingPart jobPostingPart;
 
@@ -64,7 +64,7 @@ public class JobPostingPartSpecialPayable {
      * @param id
      *            The identifiant value of the entity.
      */
-    public JobPostingPartSpecialPayable(int id) {
+    public JobPostingPartSpecialPayable(Integer id) {
         this();
         this.id = id;
     }
@@ -74,7 +74,7 @@ public class JobPostingPartSpecialPayable {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -82,7 +82,7 @@ public class JobPostingPartSpecialPayable {
     *
     * @return The value of the "paidDays" attribute.
     */
-   public int getPaidDays() {
+   public Integer getPaidDays() {
       return paidDays;
    }
    /**
@@ -109,7 +109,7 @@ public class JobPostingPartSpecialPayable {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**
@@ -118,7 +118,7 @@ public class JobPostingPartSpecialPayable {
     * @param paidDays
     *     The value of the "paidDays" attribute.
     */
-   public void setPaidDays(int paidDays) {
+   public void setPaidDays(Integer paidDays) {
       this.paidDays = paidDays;
    }
    /**

@@ -59,7 +59,7 @@ import org.restlet.test.ext.odata.deepexpand.model.Requirement;
 */
 public class CoOp {
 
-    private int academicYear;
+    private Integer academicYear;
     private boolean active;
     private boolean allowCategoryPreferences;
     private boolean allowJobPostingsPreferences;
@@ -67,15 +67,15 @@ public class CoOp {
     private Date endDate;
     private String gradePolicy;
     private boolean hasGroupGrade;
-    private int id;
+    private Integer id;
     private boolean inRegistration;
     private boolean isGroupCoOp;
     private boolean isInsideUniversity;
-    private int jobDurationDays;
-    private int maxGroupSize;
+    private Integer jobDurationDays;
+    private Integer maxGroupSize;
     private double paymentOrderAmount;
     private Date paymentOrderDate;
-    private int semester;
+    private Integer semester;
     private boolean setup;
     private Date startDate;
     private boolean supportingInvitations;
@@ -110,7 +110,7 @@ public class CoOp {
      * @param id
      *            The identifiant value of the entity.
      */
-    public CoOp(int id) {
+    public CoOp(Integer id) {
         this();
         this.id = id;
     }
@@ -120,7 +120,7 @@ public class CoOp {
     *
     * @return The value of the "academicYear" attribute.
     */
-   public int getAcademicYear() {
+   public Integer getAcademicYear() {
       return academicYear;
    }
    /**
@@ -184,7 +184,7 @@ public class CoOp {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -216,7 +216,7 @@ public class CoOp {
     *
     * @return The value of the "jobDurationDays" attribute.
     */
-   public int getJobDurationDays() {
+   public Integer getJobDurationDays() {
       return jobDurationDays;
    }
    /**
@@ -224,7 +224,7 @@ public class CoOp {
     *
     * @return The value of the "maxGroupSize" attribute.
     */
-   public int getMaxGroupSize() {
+   public Integer getMaxGroupSize() {
       return maxGroupSize;
    }
    /**
@@ -248,7 +248,7 @@ public class CoOp {
     *
     * @return The value of the "semester" attribute.
     */
-   public int getSemester() {
+   public Integer getSemester() {
       return semester;
    }
    /**
@@ -424,7 +424,7 @@ public class CoOp {
     * @param academicYear
     *     The value of the "academicYear" attribute.
     */
-   public void setAcademicYear(int academicYear) {
+   public void setAcademicYear(Integer academicYear) {
       this.academicYear = academicYear;
    }
    /**
@@ -496,7 +496,7 @@ public class CoOp {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**
@@ -532,7 +532,7 @@ public class CoOp {
     * @param jobDurationDays
     *     The value of the "jobDurationDays" attribute.
     */
-   public void setJobDurationDays(int jobDurationDays) {
+   public void setJobDurationDays(Integer jobDurationDays) {
       this.jobDurationDays = jobDurationDays;
    }
    /**
@@ -541,7 +541,7 @@ public class CoOp {
     * @param maxGroupSize
     *     The value of the "maxGroupSize" attribute.
     */
-   public void setMaxGroupSize(int maxGroupSize) {
+   public void setMaxGroupSize(Integer maxGroupSize) {
       this.maxGroupSize = maxGroupSize;
    }
    /**
@@ -568,7 +568,7 @@ public class CoOp {
     * @param semester
     *     The value of the "semester" attribute.
     */
-   public void setSemester(int semester) {
+   public void setSemester(Integer semester) {
       this.semester = semester;
    }
    /**

@@ -54,8 +54,8 @@ import org.restlet.test.ext.odata.deepexpand.model.Registration;
 */
 public class JobPosting {
 
-    private int id;
-    private int seatsNumber;
+    private Integer id;
+    private Integer seatsNumber;
     private Benefits benefits;
     private Tracking tracking;
     private Company company;
@@ -92,7 +92,7 @@ public class JobPosting {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -100,7 +100,7 @@ public class JobPosting {
     *
     * @return The value of the "seatsNumber" attribute.
     */
-   public int getSeatsNumber() {
+   public Integer getSeatsNumber() {
       return seatsNumber;
    }
    /**
@@ -206,7 +206,7 @@ public class JobPosting {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**
@@ -215,7 +215,7 @@ public class JobPosting {
     * @param seatsNumber
     *     The value of the "seatsNumber" attribute.
     */
-   public void setSeatsNumber(int seatsNumber) {
+   public void setSeatsNumber(Integer seatsNumber) {
       this.seatsNumber = seatsNumber;
    }
    /**

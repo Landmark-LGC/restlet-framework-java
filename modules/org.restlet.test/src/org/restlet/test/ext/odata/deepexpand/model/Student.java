@@ -67,7 +67,7 @@ public class Student {
     private boolean hasOtherDegree;
     private boolean hasSpecialNeeds;
     private String iban;
-    private int id;
+    private Integer id;
     private Date idIssueDate;
     private String idIssuer;
     private String idNumber;
@@ -113,7 +113,7 @@ public class Student {
      * @param id
      *            The identifiant value of the entity.
      */
-    public Student(int id) {
+    public Student(Integer id) {
         this();
         this.id = id;
     }
@@ -203,7 +203,7 @@ public class Student {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -553,7 +553,7 @@ public class Student {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

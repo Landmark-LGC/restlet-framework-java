@@ -49,7 +49,7 @@ import org.restlet.test.ext.odata.deepexpand.model.Registration;
 */
 public class Requirement {
 
-    private int id;
+    private Integer id;
     private String type;
     private Tracking tracking;
     private CoOp coOp;
@@ -70,7 +70,7 @@ public class Requirement {
      * @param id
      *            The identifiant value of the entity.
      */
-    public Requirement(int id) {
+    public Requirement(Integer id) {
         this();
         this.id = id;
     }
@@ -80,7 +80,7 @@ public class Requirement {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -132,7 +132,7 @@ public class Requirement {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

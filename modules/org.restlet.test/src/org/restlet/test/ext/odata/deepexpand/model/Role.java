@@ -50,7 +50,7 @@ import org.restlet.test.ext.odata.deepexpand.model.ReportType;
 public class Role {
 
     private String comment;
-    private int id;
+    private Integer id;
     private String name;
     private Tracking tracking;
     private List<Permission> permissions = new ArrayList<Permission>();
@@ -71,7 +71,7 @@ public class Role {
      * @param id
      *            The identifiant value of the entity.
      */
-    public Role(int id) {
+    public Role(Integer id) {
         this();
         this.id = id;
     }
@@ -89,7 +89,7 @@ public class Role {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -150,7 +150,7 @@ public class Role {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

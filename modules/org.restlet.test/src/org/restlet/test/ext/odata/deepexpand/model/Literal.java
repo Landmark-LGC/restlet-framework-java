@@ -45,7 +45,7 @@ import org.restlet.test.ext.odata.deepexpand.model.Multilingual;
 */
 public class Literal {
 
-    private int id;
+    private Integer id;
     private boolean isDefault;
     private String text;
     private Language language;
@@ -65,7 +65,7 @@ public class Literal {
      * @param id
      *            The identifiant value of the entity.
      */
-    public Literal(int id) {
+    public Literal(Integer id) {
         this();
         this.id = id;
     }
@@ -75,7 +75,7 @@ public class Literal {
     *
     * @return The value of the "id" attribute.
     */
-   public int getId() {
+   public Integer getId() {
       return id;
    }
    /**
@@ -118,7 +118,7 @@ public class Literal {
     * @param id
     *     The value of the "id" attribute.
     */
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
    /**

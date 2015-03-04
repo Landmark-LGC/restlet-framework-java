@@ -35,7 +35,7 @@ public class CreateUpdateChangeSetTestCase extends RestletTestCase {
 	private static final String cafeId = "40";
 
 	/** The Constant cafeZipCode. */
-	private static final int cafeZipCode = 111111;
+	private static final Integer cafeZipCode = new Integer(111111);
 
 	/** The Constant LOGGER. */
 	private static final Logger LOGGER = Logger

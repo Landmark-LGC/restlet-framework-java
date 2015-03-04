@@ -20,7 +20,7 @@ public class Cafe {
 
 	private String id;
 	private String name;
-	private int zipCode;
+	private Integer zipCode;
 
 	private List<Item> items = new ArrayList<Item>();
 
@@ -75,7 +75,7 @@ public class Cafe {
 	 * 
 	 * @return The value of the zipCode attribute.
 	 */
-	public int getZipCode() {
+	public Integer getZipCode() {
 		return zipCode;
 	}
 
@@ -124,7 +124,7 @@ public class Cafe {
 	 * @param ZipCode
 	 *            The value of the zipCode attribute.
 	 */
-	public void setZipCode(int zipCode) {
+	public void setZipCode(Integer zipCode) {
 		this.zipCode = zipCode;
 	}
 
