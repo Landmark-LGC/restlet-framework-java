@@ -191,11 +191,12 @@ public class Service {
             cr.setFollowingRedirects(false);
             cr.get();
 
-            if (cr.getStatus().isRedirection()) {
+			// don't set serviceRef to redirected url otherwise it will use that url to fetch metadata
+            /*if (cr.getStatus().isRedirection()) {
                 this.serviceRef = cr.getLocationRef();
-            } else {
+            } else {*/
                 this.serviceRef = cr.getReference();
-            }
+            //}
         } catch (Throwable e) {
             this.serviceRef = serviceRef;
         }
@@ -582,6 +583,8 @@ public class Service {
      */
     public Object getMetadata() {
         if (metadata == null) {
+        	long beforeRequest = System.currentTimeMillis();
+        	
             ClientResource resource = createResource("$metadata");
 
             try {
@@ -612,6 +615,9 @@ public class Service {
                 this.latestRequest = resource.getRequest();
                 this.latestResponse = resource.getResponse();
             }
+
+			long afterRequest = System.currentTimeMillis();
+            getLogger().fine("Metadata loaded in " + (afterRequest - beforeRequest) + " milliseconds.");
         }
 
         return metadata;
